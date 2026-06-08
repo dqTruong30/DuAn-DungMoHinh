@@ -1,0 +1,24 @@
+@model DungMoHinh.Models.TaiNguyen3D
+
+@{
+    ViewData["Title"] = "Chi tiet tai nguyen";
+}
+
+<h1>@Model.Name</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Loai</dt>
+    <dd class="col-sm-9">@Model.Type</dd>
+    <dt class="col-sm-3">Duong dan file</dt>
+    <dd class="col-sm-9">@Model.DuongDanFile</dd>
+    <dt class="col-sm-3">Mau mac dinh</dt>
+    <dd class="col-sm-9">@Model.MauSacMacDinh</dd>
+</dl>
+
+<h2 class="h4">Diem chinh phu kien</h2>
+<ul class="list-group">
+@foreach (var point in Model.AdjustmentPoints)
+{
+    <li class="list-group-item">@point.Name (@point.GiaTriNhoNhat - @point.GiaTriLonNhat)</li>
+}
+</ul>

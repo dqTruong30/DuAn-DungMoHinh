@@ -1,0 +1,29 @@
+@model IEnumerable<DungMoHinh.Models.GoiMauThietLap>
+
+@{
+    ViewData["Title"] = "Goi mau";
+}
+
+<h1>Goi mau</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ten</th>
+            <th>Loai</th>
+            <th>Phong cach</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Kind</td>
+            <td>@item.Style</td>
+            <td class="text-end"><a asp-action="Details" asp-route-id="@item.Id">Chi tiet</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,46 @@
+@model IEnumerable<DungMoHinh.Models.AnhTaiLen>
+@using DungMoHinh.Models
+
+@{
+    ViewData["Title"] = "Anh tai len";
+}
+
+<h1>Anh tai len</h1>
+
+<form asp-action="TaiLenImage" method="post" enctype="multipart/form-data" class="border rounded p-3 mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label" for="file">Tep anh</label>
+            <input class="form-control" type="file" name="file" id="file" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="anhTaiLenType">Loai anh</label>
+            <select class="form-select" name="anhTaiLenType" id="anhTaiLenType" asp-items="Html.GetEnumSelectList<LoaiTaiLen>()"></select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary w-100" type="submit">Tai len</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Tep</th>
+            <th>Loai</th>
+            <th>Trang thai</th>
+            <th>Kich thuoc</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.TenFile</td>
+            <td>@item.LoaiTaiLen</td>
+            <td>@item.Status</td>
+            <td>@item.KichThuocFile</td>
+        </tr>
+    }
+    </tbody>
+</table>

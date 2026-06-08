@@ -1,0 +1,15 @@
+@{
+    ViewData["Title"] = "Trang chu";
+}
+
+<div class="py-4">
+    <h1 class="display-5">DungMoHinh</h1>
+    <p class="lead">Website tao va tuy chinh nhan vat 3D ca nhan hoa.</p>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
+        <a class="btn btn-outline-primary" asp-controller="NhanVats" asp-action="Index">Nhan vat cua toi</a>
+        <a class="btn btn-outline-secondary" asp-controller="TaiNguyens" asp-action="Index">Thu vien 3D</a>
+        <a class="btn btn-outline-secondary" asp-controller="AnhTaiLens" asp-action="Index">Tai anh len</a>
+    </div>
+</div>

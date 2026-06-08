@@ -1,0 +1,16 @@
+@model DungMoHinh.Models.GoiMauThietLap
+
+@{
+    ViewData["Title"] = "Chi tiet goi mau";
+}
+
+<h1>@Model.Name</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Loai</dt>
+    <dd class="col-sm-9">@Model.Kind</dd>
+    <dt class="col-sm-3">Phong cach</dt>
+    <dd class="col-sm-9">@Model.Style</dd>
+    <dt class="col-sm-3">Mau nhan vat</dt>
+    <dd class="col-sm-9">@Model.MauNhanVat?.Name</dd>
+</dl>

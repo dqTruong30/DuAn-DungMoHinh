@@ -1,0 +1,17 @@
+@model IEnumerable<DungMoHinh.Models.TaiNguyen3D>
+
+@{
+    ViewData["Title"] = "Quan tri tai nguyen";
+}
+
+<h1>Quan tri tai nguyen</h1>
+
+<table class="table table-striped">
+    <thead><tr><th>Ten</th><th>Loai</th><th>Dang hoat dong</th><th>Nguoi dung tao</th></tr></thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr><td>@item.Name</td><td>@item.Type</td><td>@item.IsActive</td><td>@item.IsUserGenerated</td></tr>
+    }
+    </tbody>
+</table>

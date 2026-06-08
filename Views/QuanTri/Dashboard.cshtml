@@ -1,0 +1,22 @@
+@model DungMoHinh.ViewModels.TongQuanQuanTri
+
+@{
+    ViewData["Title"] = "Bang quan tri";
+}
+
+<h1>Bang quan tri</h1>
+
+<div class="row g-3">
+    <div class="col-md-4"><div class="border rounded p-3"><strong>Nguoi dung</strong><div class="display-6">@Model.UserCount</div></div></div>
+    <div class="col-md-4"><div class="border rounded p-3"><strong>Nhan vat</strong><div class="display-6">@Model.NhanVatCount</div></div></div>
+    <div class="col-md-4"><div class="border rounded p-3"><strong>Mau</strong><div class="display-6">@Model.MauCount</div></div></div>
+    <div class="col-md-4"><div class="border rounded p-3"><strong>Tai nguyen</strong><div class="display-6">@Model.TaiNguyenCount</div></div></div>
+    <div class="col-md-4"><div class="border rounded p-3"><strong>Anh tai len</strong><div class="display-6">@Model.TaiLenCount</div></div></div>
+    <div class="col-md-4"><div class="border rounded p-3"><strong>Luot xuat</strong><div class="display-6">@Model.XuatCount</div></div></div>
+</div>
+
+<div class="mt-4 d-flex gap-2">
+    <a class="btn btn-outline-primary" asp-action="Characters">Nhan vat</a>
+    <a class="btn btn-outline-primary" asp-action="Assets">Tai nguyen</a>
+    <a class="btn btn-outline-primary" asp-action="Uploads">Anh tai len</a>
+</div>

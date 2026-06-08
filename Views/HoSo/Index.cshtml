@@ -1,0 +1,18 @@
+@model DungMoHinh.Models.HoSoNguoiDung
+
+@{
+    ViewData["Title"] = "Ho so";
+}
+
+<h1>Ho so</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Ten hien thi</dt>
+    <dd class="col-sm-9">@Model.TenHienThi</dd>
+    <dt class="col-sm-3">Ma nguoi dung</dt>
+    <dd class="col-sm-9">@Model.UserId</dd>
+    <dt class="col-sm-3">Gioi thieu</dt>
+    <dd class="col-sm-9">@Model.Bio</dd>
+</dl>
+
+<a class="btn btn-primary" asp-action="MyCharacters">Nhan vat cua toi</a>
