@@ -2,14 +2,65 @@
     ViewData["Title"] = "Trang chu";
 }
 
-<div class="py-4">
-    <h1 class="display-5">DungMoHinh</h1>
-    <p class="lead">Website tao va tuy chinh nhan vat 3D ca nhan hoa.</p>
+<section class="hero-studio">
+    <div class="hero-copy">
+        <span class="eyebrow">3D Character Studio</span>
+        <h1>Thiet ke nhan vat 3D theo anh, mau co san va phong cach rieng.</h1>
+        <p>
+            Tao nhan vat nam, nu, chibi hoac binh thuong; tuy chinh ty le co the,
+            khuon mat, phu kien va tai nguyen 3D trong mot khong gian lam viec ro rang.
+        </p>
 
-    <div class="d-flex flex-wrap gap-2">
-        <a class="btn btn-primary" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
-        <a class="btn btn-outline-primary" asp-controller="NhanVats" asp-action="Index">Nhan vat cua toi</a>
-        <a class="btn btn-outline-secondary" asp-controller="TaiNguyens" asp-action="Index">Thu vien 3D</a>
-        <a class="btn btn-outline-secondary" asp-controller="AnhTaiLens" asp-action="Index">Tai anh len</a>
+        <div class="toolbar">
+            <a class="btn btn-light" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
+            <a class="btn btn-outline-secondary" asp-controller="AnhTaiLens" asp-action="Index">Tai anh mau</a>
+        </div>
     </div>
-</div>
+
+    <div class="preview-stage" aria-label="Minh hoa khong gian dung nhan vat">
+        <div class="stage-label">Live preview</div>
+        <div class="avatar-preview"></div>
+        <div class="preview-grid"></div>
+    </div>
+</section>
+
+<section class="metric-grid mb-4">
+    <div class="metric-card">
+        <span>Kieu nhan vat</span>
+        <strong>4</strong>
+        <small>Nam, nu, chibi nam, chibi nu</small>
+    </div>
+    <div class="metric-card">
+        <span>Bo chinh sua</span>
+        <strong>3</strong>
+        <small>Co the, khuon mat, phu kien</small>
+    </div>
+    <div class="metric-card">
+        <span>Nguon du lieu</span>
+        <strong>2</strong>
+        <small>Mau 3D va anh tai len</small>
+    </div>
+    <div class="metric-card">
+        <span>Dau ra</span>
+        <strong>GLB</strong>
+        <small>Mo rong them PNG, OBJ, FBX</small>
+    </div>
+</section>
+
+<section class="workflow-grid">
+    <article class="workflow-card">
+        <span class="step">1</span>
+        <h2>Chon nen nhan vat</h2>
+        <p>Bat dau tu mau nam, nu, chibi hoac tao theo anh nguoi dung tai len.</p>
+    </article>
+    <article class="workflow-card">
+        <span class="step">2</span>
+        <h2>Tuy chinh chi tiet</h2>
+        <p>Dieu chinh ty le co the, mau sac, khuon mat, phu kien va vi tri gan.</p>
+    </article>
+    <article class="workflow-card">
+        <span class="step">3</span>
+        <h2>Luu va xuat ban</h2>
+        <p>Luu cau hinh nhan vat, quan ly trong thu vien va chuan bi xuat file 3D.</p>
+    </article>
+</section>

@@ -8,48 +8,84 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DungMoHinh.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="TrangChu" asp-action="Index">DungMoHinh</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Mo dieu huong">
+<body class="app-body">
+    <div class="app-shell">
+        <aside class="app-sidebar">
+            <a class="app-brand" asp-controller="TrangChu" asp-action="Index" aria-label="Ve trang chu">
+                <span class="brand-mark">DM</span>
+                <span>
+                    <strong>DungMoHinh</strong>
+                    <small>3D Character Studio</small>
+                </span>
+            </a>
+
+            <nav class="sidebar-nav" aria-label="Dieu huong chinh">
+                <a asp-controller="TrangChu" asp-action="Index">Tong quan</a>
+                <a asp-controller="NhanVats" asp-action="Index">Nhan vat</a>
+                <a asp-controller="MauNhanVats" asp-action="Index">Mau nhan vat</a>
+                <a asp-controller="TaiNguyens" asp-action="Index">Thu vien 3D</a>
+                <a asp-controller="AnhTaiLens" asp-action="Index">Anh tai len</a>
+                <a asp-controller="QuanTri" asp-action="Dashboard">Quan tri</a>
+            </nav>
+
+            <div class="sidebar-note">
+                <span>Workspace</span>
+                <strong>Thiet ke, luu va xuat nhan vat 3D</strong>
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="topbar">
+                <nav class="navbar navbar-expand-lg p-0">
+                    <div class="container-fluid px-0">
+                        <a class="mobile-brand" asp-controller="TrangChu" asp-action="Index">
+                            <span class="brand-mark">DM</span>
+                            <span>DungMoHinh</span>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation" aria-controls="mainNavigation"
+                                aria-expanded="false" aria-label="Mo dieu huong">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                        <div class="collapse navbar-collapse" id="mainNavigation">
+                            <ul class="navbar-nav mobile-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="NhanVats" asp-action="Index">Nhan vat</a>
+                                    <a class="nav-link" asp-controller="TrangChu" asp-action="Index">Tong quan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="MauNhanVats" asp-action="Index">Mau nhan vat</a>
+                                    <a class="nav-link" asp-controller="NhanVats" asp-action="Index">Nhan vat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="TaiNguyens" asp-action="Index">Tai nguyen</a>
+                                    <a class="nav-link" asp-controller="MauNhanVats" asp-action="Index">Mau nhan vat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="AnhTaiLens" asp-action="Index">Anh tai len</a>
+                                    <a class="nav-link" asp-controller="TaiNguyens" asp-action="Index">Thu vien 3D</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="QuanTri" asp-action="Dashboard">Quan tri</a>
+                                    <a class="nav-link" asp-controller="AnhTaiLens" asp-action="Index">Anh tai len</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="QuanTri" asp-action="Dashboard">Quan tri</a>
                         </li>
                     </ul>
+                            <div class="topbar-actions">
+                                <a class="btn btn-light btn-sm" asp-controller="TaiNguyens" asp-action="Index">Thu vien</a>
+                                <a class="btn btn-primary btn-sm" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
+                            </div>
+                        </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            </nav>
+        </header>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - DungMoHinh - <a asp-controller="TrangChu" asp-action="Privacy">Chinh sach</a>
+            <main role="main" class="content-area">
+                @RenderBody()
+            </main>
+
+            <footer class="app-footer">
+                <span>&copy; 2026 DungMoHinh Studio</span>
+                <a asp-controller="TrangChu" asp-action="Privacy">Chinh sach</a>
+            </footer>
         </div>
-    </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

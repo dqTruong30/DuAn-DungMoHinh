@@ -4,19 +4,64 @@
     ViewData["Title"] = "Bang quan tri";
 }
 
-<h1>Bang quan tri</h1>
-
-<div class="row g-3">
-    <div class="col-md-4"><div class="border rounded p-3"><strong>Nguoi dung</strong><div class="display-6">@Model.UserCount</div></div></div>
-    <div class="col-md-4"><div class="border rounded p-3"><strong>Nhan vat</strong><div class="display-6">@Model.NhanVatCount</div></div></div>
-    <div class="col-md-4"><div class="border rounded p-3"><strong>Mau</strong><div class="display-6">@Model.MauCount</div></div></div>
-    <div class="col-md-4"><div class="border rounded p-3"><strong>Tai nguyen</strong><div class="display-6">@Model.TaiNguyenCount</div></div></div>
-    <div class="col-md-4"><div class="border rounded p-3"><strong>Anh tai len</strong><div class="display-6">@Model.TaiLenCount</div></div></div>
-    <div class="col-md-4"><div class="border rounded p-3"><strong>Luot xuat</strong><div class="display-6">@Model.XuatCount</div></div></div>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Quan tri he thong</span>
+        <h1>Bang quan tri</h1>
+        <p>Theo doi nguoi dung, nhan vat, mau thiet lap, tai nguyen 3D va lich su xuat file.</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-primary" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
+    </div>
 </div>
 
-<div class="mt-4 d-flex gap-2">
-    <a class="btn btn-outline-primary" asp-action="Characters">Nhan vat</a>
-    <a class="btn btn-outline-primary" asp-action="Assets">Tai nguyen</a>
-    <a class="btn btn-outline-primary" asp-action="Uploads">Anh tai len</a>
+<section class="metric-grid mb-4">
+    <div class="metric-card">
+        <span>Nguoi dung</span>
+        <strong>@Model.UserCount</strong>
+        <small>Ho so dang quan ly</small>
+    </div>
+    <div class="metric-card">
+        <span>Nhan vat</span>
+        <strong>@Model.NhanVatCount</strong>
+        <small>Du an da tao</small>
+    </div>
+    <div class="metric-card">
+        <span>Mau</span>
+        <strong>@Model.MauCount</strong>
+        <small>Bo khoi tao nhanh</small>
+    </div>
+    <div class="metric-card">
+        <span>Tai nguyen</span>
+        <strong>@Model.TaiNguyenCount</strong>
+        <small>Vat lieu va phu kien</small>
+    </div>
+    <div class="metric-card">
+        <span>Anh tai len</span>
+        <strong>@Model.TaiLenCount</strong>
+        <small>Anh mau va phu kien</small>
+    </div>
+    <div class="metric-card">
+        <span>Luot xuat</span>
+        <strong>@Model.XuatCount</strong>
+        <small>File da tao ra</small>
+    </div>
+</section>
+
+<div class="workflow-grid">
+    <a class="workflow-card" asp-action="Characters">
+        <span class="step">NV</span>
+        <h2>Nhan vat</h2>
+        <p>Kiem tra danh sach nhan vat va tinh trang cau hinh.</p>
+    </a>
+    <a class="workflow-card" asp-action="Assets">
+        <span class="step">3D</span>
+        <h2>Tai nguyen</h2>
+        <p>Quan ly model, trang phuc, phu kien, vat lieu va texture.</p>
+    </a>
+    <a class="workflow-card" asp-action="Uploads">
+        <span class="step">AI</span>
+        <h2>Anh tai len</h2>
+        <p>Theo doi anh nguoi dung, anh phu kien va ket qua phan tich.</p>
+    </a>
 </div>

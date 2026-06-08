@@ -5,9 +5,21 @@
     ViewData["Title"] = "Anh tai len";
 }
 
-<h1>Anh tai len</h1>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Du lieu dau vao</span>
+        <h1>Anh tai len</h1>
+        <p>Tai anh nhan vat, anh phu kien hoac texture de phuc vu buoc phan tich va tao goi y 3D.</p>
+    </div>
+</div>
 
-<form asp-action="TaiLenImage" method="post" enctype="multipart/form-data" class="border rounded p-3 mb-4">
+<form asp-action="TaiLenImage" method="post" enctype="multipart/form-data" class="panel mb-4">
+    <div class="panel-header">
+        <div>
+            <h2 class="panel-title">Tai anh moi</h2>
+            <p class="panel-subtitle">Anh tai len se duoc luu vao he thong de xu ly va gan voi nhan vat khi can.</p>
+        </div>
+    </div>
     <div class="row g-3 align-items-end">
         <div class="col-md-5">
             <label class="form-label" for="file">Tep anh</label>
@@ -23,24 +35,26 @@
     </div>
 </form>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Tep</th>
-            <th>Loai</th>
-            <th>Trang thai</th>
-            <th>Kich thuoc</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.TenFile</td>
-            <td>@item.LoaiTaiLen</td>
-            <td>@item.Status</td>
-            <td>@item.KichThuocFile</td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="table-wrap">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Tep</th>
+                <th>Loai</th>
+                <th>Trang thai</th>
+                <th>Kich thuoc</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><strong>@item.TenFile</strong></td>
+                <td>@item.LoaiTaiLen</td>
+                <td><span class="status-pill">@item.Status</span></td>
+                <td>@item.KichThuocFile</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

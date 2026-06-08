@@ -4,39 +4,106 @@
     ViewData["Title"] = "Trinh chinh sua nhan vat";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>@Model.Name</h1>
-    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Chi tiet</a>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Trinh dung hinh 3D</span>
+        <h1>@Model.Name</h1>
+        <p>Chinh ty le co the, mau sac, khuon mat va phu kien. Khu vuc preview se duoc gan Three.js o giai doan tiep theo.</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Chi tiet</a>
+        <a class="btn btn-primary" asp-controller="TaiNguyens" asp-action="Index">Them tai nguyen</a>
+    </div>
 </div>
 
-<div class="row g-3">
-    <div class="col-lg-8">
-        <div class="border rounded p-4 text-center bg-light" style="min-height: 420px;">
-            <h2 class="h5">Xem truoc 3D</h2>
-            <p class="text-muted">Khu vuc nay se dung de gan trinh xem 3D bang Three.js.</p>
+<div class="editor-grid">
+    <section class="editor-stage" aria-label="Khu vuc xem truoc 3D">
+        <div class="stage-label">Viewport 3D</div>
+        <div class="avatar-preview"></div>
+        <div class="preview-grid"></div>
+        <div class="editor-tools">
+            <div class="toolbar">
+                <button class="btn btn-light btn-sm" type="button">Xoay</button>
+                <button class="btn btn-light btn-sm" type="button">Phong to</button>
+                <button class="btn btn-light btn-sm" type="button">Anh sang</button>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-outline-secondary btn-sm" type="button">Luu ban nhap</button>
+                <button class="btn btn-primary btn-sm" type="button">Xuat 3D</button>
+            </div>
         </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="border rounded p-3 mb-3">
-            <h2 class="h5">Co the</h2>
-            <p>Chieu cao: @Model.CauHinhCoThe?.OverallHeight</p>
-            <p>Dau: @Model.CauHinhCoThe?.DauScale</p>
-            <p>Vai: @Model.CauHinhCoThe?.ShoulderWidth</p>
-        </div>
-        <div class="border rounded p-3 mb-3">
-            <h2 class="h5">Khuon mat</h2>
-            <p>Da: @Model.CauHinhKhuonMat?.MauDa</p>
-            <p>Toc: @Model.CauHinhKhuonMat?.MauToc</p>
-            <p>Mat: @Model.CauHinhKhuonMat?.MauMat</p>
-        </div>
-        <div class="border rounded p-3">
-            <h2 class="h5">Tai nguyen da chon</h2>
-            <ul class="mb-0">
-            @foreach (var taiNguyen in Model.TaiNguyenNhanVats)
+    </section>
+
+    <aside class="control-stack">
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Co the</h2>
+                    <p class="panel-subtitle">Dieu chinh cac ty le chinh cua nhan vat.</p>
+                </div>
+                <span class="status-pill">@Model.Kind</span>
+            </div>
+            <div class="control-row">
+                <label>Chieu cao</label>
+                <strong>@Model.CauHinhCoThe?.OverallHeight</strong>
+            </div>
+            <div class="range-track mb-3"><span style="width: 72%;"></span></div>
+            <div class="control-row">
+                <label>Dau</label>
+                <strong>@Model.CauHinhCoThe?.DauScale</strong>
+            </div>
+            <div class="range-track mb-3"><span style="width: 58%;"></span></div>
+            <div class="control-row">
+                <label>Vai</label>
+                <strong>@Model.CauHinhCoThe?.ShoulderWidth</strong>
+            </div>
+            <div class="range-track"><span style="width: 64%;"></span></div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Khuon mat</h2>
+                    <p class="panel-subtitle">Mau sac va dac diem nhan dien.</p>
+                </div>
+            </div>
+            <div class="control-row">
+                <label>Mau da</label>
+                <strong>@Model.CauHinhKhuonMat?.MauDa</strong>
+            </div>
+            <div class="control-row">
+                <label>Mau toc</label>
+                <strong>@Model.CauHinhKhuonMat?.MauToc</strong>
+            </div>
+            <div class="control-row">
+                <label>Mau mat</label>
+                <strong>@Model.CauHinhKhuonMat?.MauMat</strong>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Tai nguyen da chon</h2>
+                    <p class="panel-subtitle">Phu kien, trang phuc va vat lieu gan vao nhan vat.</p>
+                </div>
+            </div>
+            @if (Model.TaiNguyenNhanVats.Any())
             {
-                <li>@taiNguyen.TaiNguyen3D.Name</li>
+                <div class="list-group list-group-flush">
+                @foreach (var taiNguyen in Model.TaiNguyenNhanVats)
+                {
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span>@taiNguyen.TaiNguyen3D.Name</span>
+                        <span class="status-pill">@taiNguyen.TaiNguyen3D.Type</span>
+                    </div>
+                }
+                </div>
             }
-            </ul>
-        </div>
-    </div>
+            else
+            {
+                <p class="text-muted mb-0">Chua gan tai nguyen nao cho nhan vat nay.</p>
+            }
+        </section>
+    </aside>
 </div>

@@ -4,41 +4,56 @@
     ViewData["Title"] = "Nhan vat";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Nhan vat</h1>
-    <a class="btn btn-primary" asp-action="Create">Tao moi</a>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Thu vien ca nhan</span>
+        <h1>Nhan vat</h1>
+        <p>Quan ly cac nhan vat da tao, mo lai editor de tiep tuc tuy chinh hoac xem chi tiet cau hinh.</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-primary" asp-action="Create">Tao moi</a>
+    </div>
 </div>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">Chua co nhan vat nao.</div>
+    <div class="empty-state">
+        <h2>Chua co nhan vat nao</h2>
+        <p>Hay tao nhan vat dau tien de bat dau xay dung thu vien thiet ke 3D cua ban.</p>
+        <a class="btn btn-primary" asp-action="Create">Tao nhan vat</a>
+    </div>
 }
 else
 {
-    <table class="table table-striped align-middle">
-        <thead>
-            <tr>
-                <th>Ten</th>
-                <th>Loai</th>
-                <th>Phong cach</th>
-                <th>Cap nhat</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Kind</td>
-                <td>@item.Style</td>
-                <td>@(item.UpdatedAt ?? item.CreatedAt)</td>
-                <td class="text-end">
-                    <a class="btn btn-sm btn-outline-primary" asp-action="Editor" asp-route-id="@item.Id">Chinh sua</a>
-                    <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiet</a>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div class="table-wrap">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Ten</th>
+                    <th>Loai</th>
+                    <th>Phong cach</th>
+                    <th>Cap nhat</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.Name</strong>
+                        <div class="text-muted small">@item.MoTa</div>
+                    </td>
+                    <td><span class="status-pill">@item.Kind</span></td>
+                    <td>@item.Style</td>
+                    <td>@(item.UpdatedAt ?? item.CreatedAt)</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-primary" asp-action="Editor" asp-route-id="@item.Id">Chinh sua</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiet</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 }

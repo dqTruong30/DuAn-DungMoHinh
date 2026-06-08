@@ -4,28 +4,36 @@
     ViewData["Title"] = "Tai nguyen";
 }
 
-<h1>Tai nguyen</h1>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Thu vien 3D</span>
+        <h1>Tai nguyen</h1>
+        <p>Danh sach model, phu kien, vat lieu, texture va pose co the gan vao nhan vat.</p>
+    </div>
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Ten</th>
-            <th>Loai</th>
-            <th>Diem gan</th>
-            <th>Dang hoat dong</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Name</td>
-            <td>@item.Type</td>
-            <td>@item.DefaultDiemGan</td>
-            <td>@item.IsActive</td>
-            <td class="text-end"><a asp-action="Details" asp-route-id="@item.Id">Chi tiet</a></td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="table-wrap">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Ten</th>
+                <th>Loai</th>
+                <th>Diem gan</th>
+                <th>Dang hoat dong</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><strong>@item.Name</strong></td>
+                <td><span class="status-pill">@item.Type</span></td>
+                <td>@item.DefaultDiemGan</td>
+                <td>@item.IsActive</td>
+                <td class="text-end"><a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiet</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

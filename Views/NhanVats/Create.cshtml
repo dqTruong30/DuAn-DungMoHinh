@@ -6,30 +6,29 @@
     var maus = ViewBag.Maus as IEnumerable<MauNhanVat> ?? Enumerable.Empty<MauNhanVat>();
 }
 
-<h1>Tao nhan vat</h1>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Khoi tao du an</span>
+        <h1>Tao nhan vat</h1>
+        <p>Chon loai nhan vat, phong cach va mau nen de bat dau phien chinh sua 3D.</p>
+    </div>
+</div>
 
-<form asp-action="Create" method="post" class="mt-3">
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label">Ten nhan vat</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<form asp-action="Create" method="post" class="panel">
+    <div class="panel-header">
+        <div>
+            <h2 class="panel-title">Thong tin co ban</h2>
+            <p class="panel-subtitle">Cac thong tin nay se duoc dung de luu va quan ly nhan vat trong thu vien.</p>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="MoTa" class="form-label">Mo ta</label>
-        <textarea asp-for="MoTa" class="form-control" rows="3"></textarea>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label asp-for="Kind" class="form-label">Loai nhan vat</label>
-            <select asp-for="Kind" asp-items="Html.GetEnumSelectList<LoaiNhanVat>()" class="form-select"></select>
+    <div class="row g-3">
+        <div class="col-lg-7">
+            <label asp-for="Name" class="form-label">Ten nhan vat</label>
+            <input asp-for="Name" class="form-control" placeholder="Vi du: Linh chibi, Hero nam, Avatar cua toi" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="Style" class="form-label">Phong cach</label>
-            <select asp-for="Style" asp-items="Html.GetEnumSelectList<PhongCachNhanVat>()" class="form-select"></select>
-        </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-lg-5">
             <label asp-for="MauNhanVatId" class="form-label">Mau nhan vat</label>
             <select asp-for="MauNhanVatId" class="form-select">
                 <option value="">Khong chon</option>
@@ -39,10 +38,26 @@
                 }
             </select>
         </div>
+
+        <div class="col-lg-12">
+            <label asp-for="MoTa" class="form-label">Mo ta</label>
+            <textarea asp-for="MoTa" class="form-control" rows="4" placeholder="Ghi chu dac diem nhan vat, phong cach, phu kien can co..."></textarea>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Kind" class="form-label">Loai nhan vat</label>
+            <select asp-for="Kind" asp-items="Html.GetEnumSelectList<LoaiNhanVat>()" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Style" class="form-label">Phong cach</label>
+            <select asp-for="Style" asp-items="Html.GetEnumSelectList<PhongCachNhanVat>()" class="form-select"></select>
+        </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Tao moi</button>
-    <a class="btn btn-outline-secondary" asp-action="Index">Quay lai</a>
+    <div class="toolbar mt-4">
+        <button type="submit" class="btn btn-primary">Tao moi</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Quay lai</a>
+    </div>
 </form>
 
 @section Scripts {
