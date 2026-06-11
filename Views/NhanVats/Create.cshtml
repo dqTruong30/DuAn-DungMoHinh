@@ -2,36 +2,36 @@
 @using DungMoHinh.Models
 
 @{
-    ViewData["Title"] = "Tao nhan vat";
+    ViewData["Title"] = "Tạo nhân vật";
     var maus = ViewBag.Maus as IEnumerable<MauNhanVat> ?? Enumerable.Empty<MauNhanVat>();
 }
 
 <div class="page-heading">
     <div>
-        <span class="eyebrow">Khoi tao du an</span>
-        <h1>Tao nhan vat</h1>
-        <p>Chon loai nhan vat, phong cach va mau nen de bat dau phien chinh sua 3D.</p>
+        <span class="eyebrow">Khởi tạo dự án</span>
+        <h1>Tạo nhân vật</h1>
+        <p>Chọn loại nhân vật, phong cách và mẫu nền để bắt đầu phiên chỉnh sửa 3D.</p>
     </div>
 </div>
 
 <form asp-action="Create" method="post" class="panel">
     <div class="panel-header">
         <div>
-            <h2 class="panel-title">Thong tin co ban</h2>
-            <p class="panel-subtitle">Cac thong tin nay se duoc dung de luu va quan ly nhan vat trong thu vien.</p>
+            <h2 class="panel-title">Thông tin cơ bản</h2>
+            <p class="panel-subtitle">Các thông tin này sẽ được dùng để lưu và quản lý nhân vật trong thư viện.</p>
         </div>
     </div>
 
     <div class="row g-3">
         <div class="col-lg-7">
-            <label asp-for="Name" class="form-label">Ten nhan vat</label>
-            <input asp-for="Name" class="form-control" placeholder="Vi du: Linh chibi, Hero nam, Avatar cua toi" />
+            <label asp-for="Name" class="form-label">Tên nhân vật</label>
+            <input asp-for="Name" class="form-control" placeholder="Ví dụ: Linh chibi, Hero nam, Avatar của tôi" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="col-lg-5">
-            <label asp-for="MauNhanVatId" class="form-label">Mau nhan vat</label>
+            <label asp-for="MauNhanVatId" class="form-label">Mẫu nhân vật</label>
             <select asp-for="MauNhanVatId" class="form-select">
-                <option value="">Khong chon</option>
+                <option value="">Không chọn</option>
                 @foreach (var mau in maus)
                 {
                     <option value="@mau.Id">@mau.Name</option>
@@ -40,23 +40,23 @@
         </div>
 
         <div class="col-lg-12">
-            <label asp-for="MoTa" class="form-label">Mo ta</label>
-            <textarea asp-for="MoTa" class="form-control" rows="4" placeholder="Ghi chu dac diem nhan vat, phong cach, phu kien can co..."></textarea>
+            <label asp-for="MoTa" class="form-label">Mô tả</label>
+            <textarea asp-for="MoTa" class="form-control" rows="4" placeholder="Ghi chú đặc điểm nhân vật, phong cách, phụ kiện cần có..."></textarea>
         </div>
 
         <div class="col-md-6">
-            <label asp-for="Kind" class="form-label">Loai nhan vat</label>
+            <label asp-for="Kind" class="form-label">Loại nhân vật</label>
             <select asp-for="Kind" asp-items="Html.GetEnumSelectList<LoaiNhanVat>()" class="form-select"></select>
         </div>
         <div class="col-md-6">
-            <label asp-for="Style" class="form-label">Phong cach</label>
+            <label asp-for="Style" class="form-label">Phong cách</label>
             <select asp-for="Style" asp-items="Html.GetEnumSelectList<PhongCachNhanVat>()" class="form-select"></select>
         </div>
     </div>
 
     <div class="toolbar mt-4">
-        <button type="submit" class="btn btn-primary">Tao moi</button>
-        <a class="btn btn-outline-secondary" asp-action="Index">Quay lai</a>
+        <button type="submit" class="btn btn-primary">Tạo mới</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Quay lại</a>
     </div>
 </form>
 

@@ -11,26 +11,29 @@
 <body class="app-body">
     <div class="app-shell">
         <aside class="app-sidebar">
-            <a class="app-brand" asp-controller="TrangChu" asp-action="Index" aria-label="Ve trang chu">
+            <a class="app-brand" asp-controller="TrangChu" asp-action="Index" aria-label="Về trang chủ">
                 <span class="brand-mark">DM</span>
                 <span>
-                    <strong>DungMoHinh</strong>
+                    <strong>Dựng Mô Hình</strong>
                     <small>3D Character Studio</small>
                 </span>
             </a>
 
-            <nav class="sidebar-nav" aria-label="Dieu huong chinh">
-                <a asp-controller="TrangChu" asp-action="Index">Tong quan</a>
-                <a asp-controller="NhanVats" asp-action="Index">Nhan vat</a>
-                <a asp-controller="MauNhanVats" asp-action="Index">Mau nhan vat</a>
-                <a asp-controller="TaiNguyens" asp-action="Index">Thu vien 3D</a>
-                <a asp-controller="AnhTaiLens" asp-action="Index">Anh tai len</a>
-                <a asp-controller="QuanTri" asp-action="Dashboard">Quan tri</a>
+            <nav class="sidebar-nav" aria-label="Điều hướng chính">
+                <a asp-controller="TrangChu" asp-action="Index">Tổng quan</a>
+                <a asp-controller="NhanVats" asp-action="Index">Nhân vật</a>
+                <a asp-controller="MauNhanVats" asp-action="Index">Mẫu nhân vật</a>
+                <a asp-controller="TaiNguyens" asp-action="Index">Thư viện 3D</a>
+                <a asp-controller="AnhTaiLens" asp-action="Index">Ảnh tải lên</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="QuanTri" asp-action="Dashboard">Quản trị</a>
+                }
             </nav>
 
             <div class="sidebar-note">
                 <span>Workspace</span>
-                <strong>Thiet ke, luu va xuat nhan vat 3D</strong>
+                <strong>Thiết kế, lưu và xuất nhân vật 3D</strong>
             </div>
         </aside>
 
@@ -40,36 +43,52 @@
                     <div class="container-fluid px-0">
                         <a class="mobile-brand" asp-controller="TrangChu" asp-action="Index">
                             <span class="brand-mark">DM</span>
-                            <span>DungMoHinh</span>
+                            <span>Dựng Mô Hình</span>
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation" aria-controls="mainNavigation"
-                                aria-expanded="false" aria-label="Mo dieu huong">
+                                aria-expanded="false" aria-label="Mở điều hướng">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                         <div class="collapse navbar-collapse" id="mainNavigation">
                             <ul class="navbar-nav mobile-nav me-auto">
                         <li class="nav-item">
-                                    <a class="nav-link" asp-controller="TrangChu" asp-action="Index">Tong quan</a>
+                                    <a class="nav-link" asp-controller="TrangChu" asp-action="Index">Tổng quan</a>
                         </li>
                         <li class="nav-item">
-                                    <a class="nav-link" asp-controller="NhanVats" asp-action="Index">Nhan vat</a>
+                                    <a class="nav-link" asp-controller="NhanVats" asp-action="Index">Nhân vật</a>
                         </li>
                         <li class="nav-item">
-                                    <a class="nav-link" asp-controller="MauNhanVats" asp-action="Index">Mau nhan vat</a>
+                                    <a class="nav-link" asp-controller="MauNhanVats" asp-action="Index">Mẫu nhân vật</a>
                         </li>
                         <li class="nav-item">
-                                    <a class="nav-link" asp-controller="TaiNguyens" asp-action="Index">Thu vien 3D</a>
+                                    <a class="nav-link" asp-controller="TaiNguyens" asp-action="Index">Thư viện 3D</a>
                         </li>
                         <li class="nav-item">
-                                    <a class="nav-link" asp-controller="AnhTaiLens" asp-action="Index">Anh tai len</a>
+                                    <a class="nav-link" asp-controller="AnhTaiLens" asp-action="Index">Ảnh tải lên</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="QuanTri" asp-action="Dashboard">Quan tri</a>
-                        </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="QuanTri" asp-action="Dashboard">Quản trị</a>
+                                    </li>
+                                }
                     </ul>
                             <div class="topbar-actions">
-                                <a class="btn btn-light btn-sm" asp-controller="TaiNguyens" asp-action="Index">Thu vien</a>
-                                <a class="btn btn-primary btn-sm" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <span class="user-chip">@User.Identity.Name</span>
+                                    <a class="btn btn-light btn-sm" asp-controller="TaiNguyens" asp-action="Index">Thư viện</a>
+                                    <a class="btn btn-primary btn-sm" asp-controller="NhanVats" asp-action="Create">Tạo nhân vật</a>
+                                    <form asp-controller="TaiKhoan" asp-action="DangXuat" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button class="btn btn-outline-secondary btn-sm" type="submit">Đăng xuất</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-light btn-sm" asp-controller="TaiKhoan" asp-action="DangKy">Đăng ký</a>
+                                    <a class="btn btn-primary btn-sm" asp-controller="TaiKhoan" asp-action="DangNhap">Đăng nhập</a>
+                                }
                             </div>
                         </div>
                 </div>
@@ -81,8 +100,8 @@
             </main>
 
             <footer class="app-footer">
-                <span>&copy; 2026 DungMoHinh Studio</span>
-                <a asp-controller="TrangChu" asp-action="Privacy">Chinh sach</a>
+                <span>&copy; 2026 Dựng Mô Hình Studio</span>
+                <a asp-controller="TrangChu" asp-action="Privacy">Chính sách</a>
             </footer>
         </div>
     </div>

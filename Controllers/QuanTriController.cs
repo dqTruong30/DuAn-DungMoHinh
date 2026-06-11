@@ -1,10 +1,13 @@
 #nullable enable
 
 using DungMoHinh.Repositories.Interfaces;
+using DungMoHinh.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DungMoHinh.Controllers;
 
+[Authorize(Roles = VaiTroHeThong.Admin)]
 public class QuanTriController : ControllerCoSo
 {
     private readonly IDonViCongViec _unitOfWork;

@@ -1,23 +1,23 @@
 @{
-    ViewData["Title"] = "Trang chu";
+    ViewData["Title"] = "Trang chủ";
 }
 
 <section class="hero-studio">
     <div class="hero-copy">
         <span class="eyebrow">3D Character Studio</span>
-        <h1>Thiet ke nhan vat 3D theo anh, mau co san va phong cach rieng.</h1>
+        <h1>Thiết kế nhân vật 3D theo ảnh, mẫu có sẵn và phong cách riêng.</h1>
         <p>
-            Tao nhan vat nam, nu, chibi hoac binh thuong; tuy chinh ty le co the,
-            khuon mat, phu kien va tai nguyen 3D trong mot khong gian lam viec ro rang.
+            Tạo nhân vật nam, nữ, chibi hoặc bình thường; tùy chỉnh tỷ lệ cơ thể,
+            khuôn mặt, phụ kiện và tài nguyên 3D trong một không gian làm việc rõ ràng.
         </p>
 
         <div class="toolbar">
-            <a class="btn btn-light" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
-            <a class="btn btn-outline-secondary" asp-controller="AnhTaiLens" asp-action="Index">Tai anh mau</a>
+            <a class="btn btn-light" asp-controller="NhanVats" asp-action="Create">Tạo nhân vật</a>
+            <a class="btn btn-outline-secondary" asp-controller="AnhTaiLens" asp-action="Index">Tải ảnh mẫu</a>
         </div>
     </div>
 
-    <div class="preview-stage" aria-label="Minh hoa khong gian dung nhan vat">
+    <div class="preview-stage" aria-label="Minh họa không gian dựng nhân vật">
         <div class="stage-label">Live preview</div>
         <div class="avatar-preview"></div>
         <div class="preview-grid"></div>
@@ -26,41 +26,41 @@
 
 <section class="metric-grid mb-4">
     <div class="metric-card">
-        <span>Kieu nhan vat</span>
+        <span>Kiểu nhân vật</span>
         <strong>4</strong>
-        <small>Nam, nu, chibi nam, chibi nu</small>
+        <small>Nam, nữ, chibi nam, chibi nữ</small>
     </div>
     <div class="metric-card">
-        <span>Bo chinh sua</span>
+        <span>Bộ chỉnh sửa</span>
         <strong>3</strong>
-        <small>Co the, khuon mat, phu kien</small>
+        <small>Cơ thể, khuôn mặt, phụ kiện</small>
     </div>
     <div class="metric-card">
-        <span>Nguon du lieu</span>
+        <span>Nguồn dữ liệu</span>
         <strong>2</strong>
-        <small>Mau 3D va anh tai len</small>
+        <small>Mẫu 3D và ảnh tải lên</small>
     </div>
     <div class="metric-card">
-        <span>Dau ra</span>
+        <span>Đầu ra</span>
         <strong>GLB</strong>
-        <small>Mo rong them PNG, OBJ, FBX</small>
+        <small>Mở rộng thêm PNG, OBJ, FBX</small>
     </div>
 </section>
 
 <section class="workflow-grid">
     <article class="workflow-card">
         <span class="step">1</span>
-        <h2>Chon nen nhan vat</h2>
-        <p>Bat dau tu mau nam, nu, chibi hoac tao theo anh nguoi dung tai len.</p>
+        <h2>Chọn nền nhân vật</h2>
+        <p>Bắt đầu từ mẫu nam, nữ, chibi hoặc tạo theo ảnh người dùng tải lên.</p>
     </article>
     <article class="workflow-card">
         <span class="step">2</span>
-        <h2>Tuy chinh chi tiet</h2>
-        <p>Dieu chinh ty le co the, mau sac, khuon mat, phu kien va vi tri gan.</p>
+        <h2>Tùy chỉnh chi tiết</h2>
+        <p>Điều chỉnh tỷ lệ cơ thể, màu sắc, khuôn mặt, phụ kiện và vị trí gắn.</p>
     </article>
     <article class="workflow-card">
         <span class="step">3</span>
-        <h2>Luu va xuat ban</h2>
-        <p>Luu cau hinh nhan vat, quan ly trong thu vien va chuan bi xuat file 3D.</p>
+        <h2>Lưu và xuất bản</h2>
+        <p>Lưu cấu hình nhân vật, quản lý trong thư viện và chuẩn bị xuất file 3D.</p>
     </article>
 </section>

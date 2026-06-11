@@ -2,35 +2,35 @@
 @using DungMoHinh.Models
 
 @{
-    ViewData["Title"] = "Anh tai len";
+    ViewData["Title"] = "Ảnh tải lên";
 }
 
 <div class="page-heading">
     <div>
-        <span class="eyebrow">Du lieu dau vao</span>
-        <h1>Anh tai len</h1>
-        <p>Tai anh nhan vat, anh phu kien hoac texture de phuc vu buoc phan tich va tao goi y 3D.</p>
+        <span class="eyebrow">Dữ liệu đầu vào</span>
+        <h1>Ảnh tải lên</h1>
+        <p>Tải ảnh nhân vật, ảnh phụ kiện hoặc texture để phục vụ bước phân tích và tạo gợi ý 3D.</p>
     </div>
 </div>
 
 <form asp-action="TaiLenImage" method="post" enctype="multipart/form-data" class="panel mb-4">
     <div class="panel-header">
         <div>
-            <h2 class="panel-title">Tai anh moi</h2>
-            <p class="panel-subtitle">Anh tai len se duoc luu vao he thong de xu ly va gan voi nhan vat khi can.</p>
+            <h2 class="panel-title">Tải ảnh mới</h2>
+            <p class="panel-subtitle">Ảnh tải lên sẽ được lưu vào hệ thống để xử lý và gắn với nhân vật khi cần.</p>
         </div>
     </div>
     <div class="row g-3 align-items-end">
         <div class="col-md-5">
-            <label class="form-label" for="file">Tep anh</label>
+            <label class="form-label" for="file">Tệp ảnh</label>
             <input class="form-control" type="file" name="file" id="file" />
         </div>
         <div class="col-md-4">
-            <label class="form-label" for="anhTaiLenType">Loai anh</label>
+            <label class="form-label" for="anhTaiLenType">Loại ảnh</label>
             <select class="form-select" name="anhTaiLenType" id="anhTaiLenType" asp-items="Html.GetEnumSelectList<LoaiTaiLen>()"></select>
         </div>
         <div class="col-md-3">
-            <button class="btn btn-primary w-100" type="submit">Tai len</button>
+            <button class="btn btn-primary w-100" type="submit">Tải lên</button>
         </div>
     </div>
 </form>
@@ -39,10 +39,10 @@
     <table class="table align-middle">
         <thead>
             <tr>
-                <th>Tep</th>
-                <th>Loai</th>
-                <th>Trang thai</th>
-                <th>Kich thuoc</th>
+                <th>Tệp</th>
+                <th>Loại</th>
+                <th>Trạng thái</th>
+                <th>Kích thước</th>
             </tr>
         </thead>
         <tbody>

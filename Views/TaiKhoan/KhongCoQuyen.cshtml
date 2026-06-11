@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Không có quyền";
+}
+
+<div class="empty-state">
+    <h1>Bạn không có quyền truy cập</h1>
+    <p>Khu vực này chỉ dành cho tài khoản Admin. Tài khoản User chỉ được sử dụng các chức năng tạo nhân vật, upload ảnh và chỉnh sửa nhân vật của mình.</p>
+    <div class="toolbar justify-content-center">
+        <a class="btn btn-primary" asp-controller="TrangChu" asp-action="Index">Về trang chủ</a>
+        <a class="btn btn-outline-secondary" asp-controller="NhanVats" asp-action="Index">Nhân vật của tôi</a>
+    </div>
+</div>

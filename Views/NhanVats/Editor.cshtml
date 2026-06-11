@@ -1,35 +1,35 @@
 @model DungMoHinh.Models.NhanVat
 
 @{
-    ViewData["Title"] = "Trinh chinh sua nhan vat";
+    ViewData["Title"] = "Trình chỉnh sửa nhân vật";
 }
 
 <div class="page-heading">
     <div>
-        <span class="eyebrow">Trinh dung hinh 3D</span>
+        <span class="eyebrow">Trình dựng hình 3D</span>
         <h1>@Model.Name</h1>
-        <p>Chinh ty le co the, mau sac, khuon mat va phu kien. Khu vuc preview se duoc gan Three.js o giai doan tiep theo.</p>
+        <p>Chỉnh tỷ lệ cơ thể, màu sắc, khuôn mặt và phụ kiện. Khu vực preview sẽ được gắn Three.js ở giai đoạn tiếp theo.</p>
     </div>
     <div class="toolbar">
-        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Chi tiet</a>
-        <a class="btn btn-primary" asp-controller="TaiNguyens" asp-action="Index">Them tai nguyen</a>
+        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Chi tiết</a>
+        <a class="btn btn-primary" asp-controller="TaiNguyens" asp-action="Index">Thêm tài nguyên</a>
     </div>
 </div>
 
 <div class="editor-grid">
-    <section class="editor-stage" aria-label="Khu vuc xem truoc 3D">
+    <section class="editor-stage" aria-label="Khu vực xem trước 3D">
         <div class="stage-label">Viewport 3D</div>
         <div class="avatar-preview"></div>
         <div class="preview-grid"></div>
         <div class="editor-tools">
             <div class="toolbar">
                 <button class="btn btn-light btn-sm" type="button">Xoay</button>
-                <button class="btn btn-light btn-sm" type="button">Phong to</button>
-                <button class="btn btn-light btn-sm" type="button">Anh sang</button>
+                <button class="btn btn-light btn-sm" type="button">Phóng to</button>
+                <button class="btn btn-light btn-sm" type="button">Ánh sáng</button>
             </div>
             <div class="toolbar">
-                <button class="btn btn-outline-secondary btn-sm" type="button">Luu ban nhap</button>
-                <button class="btn btn-primary btn-sm" type="button">Xuat 3D</button>
+                <button class="btn btn-outline-secondary btn-sm" type="button">Lưu bản nháp</button>
+                <button class="btn btn-primary btn-sm" type="button">Xuất 3D</button>
             </div>
         </div>
     </section>
@@ -38,18 +38,18 @@
         <section class="panel">
             <div class="panel-header">
                 <div>
-                    <h2 class="panel-title">Co the</h2>
-                    <p class="panel-subtitle">Dieu chinh cac ty le chinh cua nhan vat.</p>
+                    <h2 class="panel-title">Cơ thể</h2>
+                    <p class="panel-subtitle">Điều chỉnh các tỷ lệ chính của nhân vật.</p>
                 </div>
                 <span class="status-pill">@Model.Kind</span>
             </div>
             <div class="control-row">
-                <label>Chieu cao</label>
+                <label>Chiều cao</label>
                 <strong>@Model.CauHinhCoThe?.OverallHeight</strong>
             </div>
             <div class="range-track mb-3"><span style="width: 72%;"></span></div>
             <div class="control-row">
-                <label>Dau</label>
+                <label>Đầu</label>
                 <strong>@Model.CauHinhCoThe?.DauScale</strong>
             </div>
             <div class="range-track mb-3"><span style="width: 58%;"></span></div>
@@ -63,20 +63,20 @@
         <section class="panel">
             <div class="panel-header">
                 <div>
-                    <h2 class="panel-title">Khuon mat</h2>
-                    <p class="panel-subtitle">Mau sac va dac diem nhan dien.</p>
+                    <h2 class="panel-title">Khuôn mặt</h2>
+                    <p class="panel-subtitle">Màu sắc và đặc điểm nhận diện.</p>
                 </div>
             </div>
             <div class="control-row">
-                <label>Mau da</label>
+                <label>Màu da</label>
                 <strong>@Model.CauHinhKhuonMat?.MauDa</strong>
             </div>
             <div class="control-row">
-                <label>Mau toc</label>
+                <label>Màu tóc</label>
                 <strong>@Model.CauHinhKhuonMat?.MauToc</strong>
             </div>
             <div class="control-row">
-                <label>Mau mat</label>
+                <label>Màu mắt</label>
                 <strong>@Model.CauHinhKhuonMat?.MauMat</strong>
             </div>
         </section>
@@ -84,8 +84,8 @@
         <section class="panel">
             <div class="panel-header">
                 <div>
-                    <h2 class="panel-title">Tai nguyen da chon</h2>
-                    <p class="panel-subtitle">Phu kien, trang phuc va vat lieu gan vao nhan vat.</p>
+                    <h2 class="panel-title">Tài nguyên đã chọn</h2>
+                    <p class="panel-subtitle">Phụ kiện, trang phục và vật liệu gắn vào nhân vật.</p>
                 </div>
             </div>
             @if (Model.TaiNguyenNhanVats.Any())
@@ -102,7 +102,7 @@
             }
             else
             {
-                <p class="text-muted mb-0">Chua gan tai nguyen nao cho nhan vat nay.</p>
+                <p class="text-muted mb-0">Chưa gắn tài nguyên nào cho nhân vật này.</p>
             }
         </section>
     </aside>

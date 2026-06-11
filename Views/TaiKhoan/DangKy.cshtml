@@ -1,0 +1,67 @@
+@model DungMoHinh.ViewModels.YeuCauDangKy
+
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="auth-page">
+    <section class="auth-panel">
+        <div class="panel-header">
+            <div>
+                <span class="eyebrow">Tài khoản User</span>
+                <h1 class="panel-title">Tạo tài khoản</h1>
+                <p class="panel-subtitle">Tài khoản đăng ký từ giao diện sẽ mặc định là quyền User.</p>
+            </div>
+        </div>
+
+        <form asp-action="DangKy" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="TenHienThi" class="form-label">Tên hiển thị</label>
+                <input asp-for="TenHienThi" class="form-control" autocomplete="name" />
+                <span asp-validation-for="TenHienThi" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" autocomplete="username" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MatKhau" class="form-label">Mật khẩu</label>
+                <input asp-for="MatKhau" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="MatKhau" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="XacNhanMatKhau" class="form-label">Nhập lại mật khẩu</label>
+                <input asp-for="XacNhanMatKhau" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="XacNhanMatKhau" class="text-danger"></span>
+            </div>
+
+            <div class="toolbar">
+                <button type="submit" class="btn btn-primary">Đăng ký</button>
+                <a class="btn btn-outline-secondary" asp-action="DangNhap">Đã có tài khoản</a>
+            </div>
+        </form>
+    </section>
+
+    <aside class="auth-help panel">
+        <h2 class="panel-title">Phân quyền</h2>
+        <p class="panel-subtitle">Người dùng mới chỉ được tạo và sử dụng chức năng, không được can thiệp vào dữ liệu hệ thống.</p>
+        <div class="login-sample">
+            <span class="status-pill">User</span>
+            <strong>Quyền mặc định</strong>
+            <small>Không có quyền quản trị</small>
+            <p>Admin sẽ được tạo sẵn bằng dữ liệu seed trong hệ thống.</p>
+        </div>
+    </aside>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

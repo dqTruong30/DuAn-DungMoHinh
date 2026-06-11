@@ -1,0 +1,69 @@
+@model DungMoHinh.ViewModels.YeuCauDangNhap
+
+@{
+    ViewData["Title"] = "Đăng nhập Admin";
+}
+
+<div class="auth-page">
+    <section class="auth-panel admin-auth-panel">
+        <div class="panel-header">
+            <div>
+                <span class="eyebrow">Model Admin</span>
+                <h1 class="panel-title">Đăng nhập quản trị</h1>
+                <p class="panel-subtitle">Cổng /modelAdmin chỉ dành cho Admin để quản lý hệ thống, tài nguyên, mẫu và dữ liệu người dùng.</p>
+            </div>
+        </div>
+
+        <form asp-controller="ModelAdmin" asp-action="Index" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="ReturnUrl" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email Admin</label>
+                <input asp-for="Email" class="form-control" autocomplete="username" placeholder="admin@dungmohinh.local" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MatKhau" class="form-label">Mật khẩu Admin</label>
+                <input asp-for="MatKhau" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="MatKhau" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-4">
+                <input asp-for="GhiNhoDangNhap" class="form-check-input" />
+                <label asp-for="GhiNhoDangNhap" class="form-check-label">Ghi nhớ đăng nhập</label>
+            </div>
+
+            <div class="toolbar">
+                <button type="submit" class="btn btn-primary">Đăng nhập Admin</button>
+                <a class="btn btn-outline-secondary" asp-controller="TaiKhoan" asp-action="DangNhap">Về đăng nhập User</a>
+            </div>
+        </form>
+    </section>
+
+    <aside class="auth-help panel">
+        <h2 class="panel-title">Tài khoản Admin mẫu</h2>
+        <p class="panel-subtitle">Dùng để kiểm tra khu quản trị trong quá trình làm đồ án.</p>
+
+        <div class="login-sample">
+            <span class="status-pill">Admin</span>
+            <strong>admin@dungmohinh.local</strong>
+            <small>Mật khẩu: Admin123</small>
+            <p>Có quyền thực hiện tất cả công việc trong website và can thiệp vào dữ liệu hệ thống.</p>
+        </div>
+
+        <div class="login-sample">
+            <span class="status-pill">User</span>
+            <strong>Không được phép</strong>
+            <small>User sẽ bị từ chối tại /modelAdmin</small>
+            <p>Người dùng thường chỉ đăng nhập tại cổng /TaiKhoan/DangNhap.</p>
+        </div>
+    </aside>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
