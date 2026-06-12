@@ -1,0 +1,408 @@
+@model DungMoHinh.ViewModels.YeuCauSuaNhanVat
+@using DungMoHinh.Models
+@using System.Globalization
+
+@functions {
+    private static string Num(decimal value)
+    {
+        return value.ToString("0.##", CultureInfo.InvariantCulture);
+    }
+}
+
+@{
+    ViewData["Title"] = "Sửa nhân vật";
+    var maus = ViewBag.Maus as IEnumerable<MauNhanVat> ?? Enumerable.Empty<MauNhanVat>();
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Chỉnh sửa nhanh</span>
+        <h1>@Model.Name</h1>
+        <p>Dùng preset, thanh kéo và ô nhập ngắn để chỉnh nhân vật nhanh hơn.</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Chi tiết</a>
+        <a class="btn btn-outline-secondary" asp-action="Editor" asp-route-id="@Model.Id">Mở editor</a>
+    </div>
+</div>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="edit-character-form">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <section class="panel mb-3">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">Thông tin cơ bản</h2>
+                <p class="panel-subtitle">Các thông tin nhận diện chính của nhân vật.</p>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-lg-7">
+                <label asp-for="Name" class="form-label">Tên nhân vật</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-lg-5">
+                <label asp-for="MauNhanVatId" class="form-label">Mẫu nhân vật</label>
+                <select asp-for="MauNhanVatId" class="form-select">
+                    <option value="">Không chọn mẫu</option>
+                    @foreach (var mau in maus)
+                    {
+                        <option value="@mau.Id">@mau.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-12">
+                <label asp-for="MoTa" class="form-label">Mô tả</label>
+                <textarea asp-for="MoTa" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Kind" class="form-label">Loại nhân vật</label>
+                <select asp-for="Kind" asp-items="Html.GetEnumSelectList<LoaiNhanVat>()" class="form-select"></select>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Style" class="form-label">Phong cách</label>
+                <select asp-for="Style" asp-items="Html.GetEnumSelectList<PhongCachNhanVat>()" class="form-select"></select>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel mb-3">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">Cấu hình cơ thể</h2>
+                <p class="panel-subtitle">Kéo thanh để chỉnh nhanh, nhập số khi cần chính xác.</p>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-light btn-sm js-preset" type="button" data-preset="balanced">Cân bằng</button>
+                <button class="btn btn-light btn-sm js-preset" type="button" data-preset="chibi">Chibi</button>
+                <button class="btn btn-light btn-sm js-preset" type="button" data-preset="tall">Cao gầy</button>
+                <button class="btn btn-light btn-sm js-preset" type="button" data-preset="strong">Mạnh mẽ</button>
+            </div>
+        </div>
+
+        <div class="quick-edit-grid">
+            <div class="fast-control">
+                <label for="CoThe_OverallHeight">Chiều cao</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.OverallHeight)" data-target="CoThe_OverallHeight" />
+                    <input id="CoThe_OverallHeight" name="CoThe.OverallHeight" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.OverallHeight)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_DauScale">Đầu</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.DauScale)" data-target="CoThe_DauScale" />
+                    <input id="CoThe_DauScale" name="CoThe.DauScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.DauScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_CoScale">Cổ</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.CoScale)" data-target="CoThe_CoScale" />
+                    <input id="CoThe_CoScale" name="CoThe.CoScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.CoScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_ShoulderWidth">Vai</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.ShoulderWidth)" data-target="CoThe_ShoulderWidth" />
+                    <input id="CoThe_ShoulderWidth" name="CoThe.ShoulderWidth" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.ShoulderWidth)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_NgucScale">Ngực</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.NgucScale)" data-target="CoThe_NgucScale" />
+                    <input id="CoThe_NgucScale" name="CoThe.NgucScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.NgucScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_EoScale">Eo</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.EoScale)" data-target="CoThe_EoScale" />
+                    <input id="CoThe_EoScale" name="CoThe.EoScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.EoScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_HipScale">Hông</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.HipScale)" data-target="CoThe_HipScale" />
+                    <input id="CoThe_HipScale" name="CoThe.HipScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.HipScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_ArmLength">Dài tay</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.ArmLength)" data-target="CoThe_ArmLength" />
+                    <input id="CoThe_ArmLength" name="CoThe.ArmLength" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.ArmLength)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_ArmWidth">Rộng tay</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.ArmWidth)" data-target="CoThe_ArmWidth" />
+                    <input id="CoThe_ArmWidth" name="CoThe.ArmWidth" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.ArmWidth)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_HandScale">Bàn tay</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.HandScale)" data-target="CoThe_HandScale" />
+                    <input id="CoThe_HandScale" name="CoThe.HandScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.HandScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_LegLength">Dài chân</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.LegLength)" data-target="CoThe_LegLength" />
+                    <input id="CoThe_LegLength" name="CoThe.LegLength" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.LegLength)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_LegWidth">Rộng chân</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.LegWidth)" data-target="CoThe_LegWidth" />
+                    <input id="CoThe_LegWidth" name="CoThe.LegWidth" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.LegWidth)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_FootScale">Bàn chân</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.FootScale)" data-target="CoThe_FootScale" />
+                    <input id="CoThe_FootScale" name="CoThe.FootScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.FootScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="CoThe_CoTheMass">Khối cơ thể</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.CoTheMass)" data-target="CoThe_CoTheMass" />
+                    <input id="CoThe_CoTheMass" name="CoThe.CoTheMass" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.CoThe.CoTheMass)" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel mb-3">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">Cấu hình khuôn mặt</h2>
+                <p class="panel-subtitle">Nhóm thông số thường dùng cho khuôn mặt và màu sắc.</p>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-light btn-sm js-preset" type="button" data-preset="faceDefault">Mặc định</button>
+                <button class="btn btn-light btn-sm js-preset" type="button" data-preset="faceCute">Dễ thương</button>
+                <button class="btn btn-light btn-sm js-preset" type="button" data-preset="faceSharp">Sắc nét</button>
+            </div>
+        </div>
+
+        <div class="quick-edit-grid">
+            <div class="fast-control">
+                <label for="KhuonMat_KhuonMatWidth">Rộng mặt</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.KhuonMatWidth)" data-target="KhuonMat_KhuonMatWidth" />
+                    <input id="KhuonMat_KhuonMatWidth" name="KhuonMat.KhuonMatWidth" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.KhuonMatWidth)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_KhuonMatLength">Dài mặt</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.KhuonMatLength)" data-target="KhuonMat_KhuonMatLength" />
+                    <input id="KhuonMat_KhuonMatLength" name="KhuonMat.KhuonMatLength" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.KhuonMatLength)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_EyeSize">Kích thước mắt</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.EyeSize)" data-target="KhuonMat_EyeSize" />
+                    <input id="KhuonMat_EyeSize" name="KhuonMat.EyeSize" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.EyeSize)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_EyeDistance">Khoảng cách mắt</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.EyeDistance)" data-target="KhuonMat_EyeDistance" />
+                    <input id="KhuonMat_EyeDistance" name="KhuonMat.EyeDistance" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.EyeDistance)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_EyeAngle">Góc mắt</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="-1.00" max="1.00" step="0.05" value="@Num(Model.KhuonMat.EyeAngle)" data-target="KhuonMat_EyeAngle" />
+                    <input id="KhuonMat_EyeAngle" name="KhuonMat.EyeAngle" class="form-control fast-number js-number-sync" type="number" min="-1.00" max="1.00" step="0.05" value="@Num(Model.KhuonMat.EyeAngle)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_NoseHeight">Cao mũi</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.NoseHeight)" data-target="KhuonMat_NoseHeight" />
+                    <input id="KhuonMat_NoseHeight" name="KhuonMat.NoseHeight" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.NoseHeight)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_NoseWidth">Rộng mũi</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.NoseWidth)" data-target="KhuonMat_NoseWidth" />
+                    <input id="KhuonMat_NoseWidth" name="KhuonMat.NoseWidth" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.NoseWidth)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_MouthWidth">Rộng miệng</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.MouthWidth)" data-target="KhuonMat_MouthWidth" />
+                    <input id="KhuonMat_MouthWidth" name="KhuonMat.MouthWidth" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.MouthWidth)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_LipThickness">Độ dày môi</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.LipThickness)" data-target="KhuonMat_LipThickness" />
+                    <input id="KhuonMat_LipThickness" name="KhuonMat.LipThickness" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.LipThickness)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_EarScale">Tai</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.EarScale)" data-target="KhuonMat_EarScale" />
+                    <input id="KhuonMat_EarScale" name="KhuonMat.EarScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.EarScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_ChinScale">Cằm</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.ChinScale)" data-target="KhuonMat_ChinScale" />
+                    <input id="KhuonMat_ChinScale" name="KhuonMat.ChinScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.ChinScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_CheekScale">Má</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.CheekScale)" data-target="KhuonMat_CheekScale" />
+                    <input id="KhuonMat_CheekScale" name="KhuonMat.CheekScale" class="form-control fast-number js-number-sync" type="number" min="0.50" max="2.00" step="0.05" value="@Num(Model.KhuonMat.CheekScale)" />
+                </div>
+            </div>
+            <div class="fast-control">
+                <label for="KhuonMat_EyebrowAngle">Góc lông mày</label>
+                <div class="fast-control-row">
+                    <input class="form-range js-range-sync" type="range" min="-1.00" max="1.00" step="0.05" value="@Num(Model.KhuonMat.EyebrowAngle)" data-target="KhuonMat_EyebrowAngle" />
+                    <input id="KhuonMat_EyebrowAngle" name="KhuonMat.EyebrowAngle" class="form-control fast-number js-number-sync" type="number" min="-1.00" max="1.00" step="0.05" value="@Num(Model.KhuonMat.EyebrowAngle)" />
+                </div>
+            </div>
+        </div>
+
+        <div class="color-grid mt-3">
+            <div class="color-control">
+                <label for="KhuonMat_MauDa">Màu da</label>
+                <input id="KhuonMat_MauDa" name="KhuonMat.MauDa" class="form-control form-control-color" type="color" value="@Model.KhuonMat.MauDa" />
+            </div>
+            <div class="color-control">
+                <label for="KhuonMat_MauMat">Màu mắt</label>
+                <input id="KhuonMat_MauMat" name="KhuonMat.MauMat" class="form-control form-control-color" type="color" value="@Model.KhuonMat.MauMat" />
+            </div>
+            <div class="color-control">
+                <label for="KhuonMat_MauToc">Màu tóc</label>
+                <input id="KhuonMat_MauToc" name="KhuonMat.MauToc" class="form-control form-control-color" type="color" value="@Model.KhuonMat.MauToc" />
+            </div>
+        </div>
+    </section>
+
+    <div class="sticky-form-actions">
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <button class="btn btn-light js-preset" type="button" data-preset="resetAll">Đặt lại tỷ lệ 1.00</button>
+        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Hủy</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const presets = {
+                balanced: {
+                    "CoThe.OverallHeight": 1.00, "CoThe.DauScale": 1.00, "CoThe.CoScale": 1.00,
+                    "CoThe.ShoulderWidth": 1.00, "CoThe.NgucScale": 1.00, "CoThe.EoScale": 1.00,
+                    "CoThe.HipScale": 1.00, "CoThe.ArmLength": 1.00, "CoThe.ArmWidth": 1.00,
+                    "CoThe.HandScale": 1.00, "CoThe.LegLength": 1.00, "CoThe.LegWidth": 1.00,
+                    "CoThe.FootScale": 1.00, "CoThe.CoTheMass": 1.00
+                },
+                chibi: {
+                    "CoThe.OverallHeight": 0.75, "CoThe.DauScale": 1.55, "CoThe.CoScale": 0.80,
+                    "CoThe.ShoulderWidth": 0.80, "CoThe.NgucScale": 0.85, "CoThe.EoScale": 0.95,
+                    "CoThe.HipScale": 0.90, "CoThe.ArmLength": 0.75, "CoThe.ArmWidth": 0.85,
+                    "CoThe.HandScale": 0.90, "CoThe.LegLength": 0.75, "CoThe.LegWidth": 0.85,
+                    "CoThe.FootScale": 0.90, "CoThe.CoTheMass": 0.85
+                },
+                tall: {
+                    "CoThe.OverallHeight": 1.35, "CoThe.DauScale": 0.90, "CoThe.CoScale": 1.05,
+                    "CoThe.ShoulderWidth": 0.95, "CoThe.NgucScale": 0.95, "CoThe.EoScale": 0.90,
+                    "CoThe.HipScale": 0.95, "CoThe.ArmLength": 1.20, "CoThe.ArmWidth": 0.90,
+                    "CoThe.HandScale": 0.95, "CoThe.LegLength": 1.35, "CoThe.LegWidth": 0.90,
+                    "CoThe.FootScale": 1.00, "CoThe.CoTheMass": 0.95
+                },
+                strong: {
+                    "CoThe.OverallHeight": 1.15, "CoThe.DauScale": 1.00, "CoThe.CoScale": 1.10,
+                    "CoThe.ShoulderWidth": 1.35, "CoThe.NgucScale": 1.25, "CoThe.EoScale": 1.05,
+                    "CoThe.HipScale": 1.10, "CoThe.ArmLength": 1.05, "CoThe.ArmWidth": 1.25,
+                    "CoThe.HandScale": 1.10, "CoThe.LegLength": 1.08, "CoThe.LegWidth": 1.18,
+                    "CoThe.FootScale": 1.10, "CoThe.CoTheMass": 1.30
+                },
+                faceDefault: {
+                    "KhuonMat.KhuonMatWidth": 1.00, "KhuonMat.KhuonMatLength": 1.00, "KhuonMat.EyeSize": 1.00,
+                    "KhuonMat.EyeDistance": 1.00, "KhuonMat.EyeAngle": 0.00, "KhuonMat.NoseHeight": 1.00,
+                    "KhuonMat.NoseWidth": 1.00, "KhuonMat.MouthWidth": 1.00, "KhuonMat.LipThickness": 1.00,
+                    "KhuonMat.EarScale": 1.00, "KhuonMat.ChinScale": 1.00, "KhuonMat.CheekScale": 1.00,
+                    "KhuonMat.EyebrowAngle": 0.00
+                },
+                faceCute: {
+                    "KhuonMat.KhuonMatWidth": 1.05, "KhuonMat.KhuonMatLength": 0.90, "KhuonMat.EyeSize": 1.35,
+                    "KhuonMat.EyeDistance": 0.95, "KhuonMat.EyeAngle": 0.05, "KhuonMat.NoseHeight": 0.85,
+                    "KhuonMat.NoseWidth": 0.85, "KhuonMat.MouthWidth": 1.10, "KhuonMat.LipThickness": 1.10,
+                    "KhuonMat.EarScale": 0.95, "KhuonMat.ChinScale": 0.85, "KhuonMat.CheekScale": 1.20,
+                    "KhuonMat.EyebrowAngle": 0.05
+                },
+                faceSharp: {
+                    "KhuonMat.KhuonMatWidth": 0.95, "KhuonMat.KhuonMatLength": 1.10, "KhuonMat.EyeSize": 1.05,
+                    "KhuonMat.EyeDistance": 1.05, "KhuonMat.EyeAngle": 0.20, "KhuonMat.NoseHeight": 1.20,
+                    "KhuonMat.NoseWidth": 0.95, "KhuonMat.MouthWidth": 0.95, "KhuonMat.LipThickness": 0.90,
+                    "KhuonMat.EarScale": 1.00, "KhuonMat.ChinScale": 1.20, "KhuonMat.CheekScale": 0.95,
+                    "KhuonMat.EyebrowAngle": 0.20
+                }
+            };
+
+            presets.resetAll = { ...presets.balanced, ...presets.faceDefault };
+
+            const setValue = (name, value) => {
+                const input = document.querySelector(`[name="${name}"]`);
+                if (!input) return;
+                const formatted = Number(value).toFixed(2);
+                input.value = formatted;
+                const range = document.querySelector(`.js-range-sync[data-target="${input.id}"]`);
+                if (range) range.value = formatted;
+            };
+
+            document.querySelectorAll(".js-range-sync").forEach(range => {
+                range.addEventListener("input", () => {
+                    const target = document.getElementById(range.dataset.target);
+                    if (target) target.value = Number(range.value).toFixed(2);
+                });
+            });
+
+            document.querySelectorAll(".js-number-sync").forEach(input => {
+                input.addEventListener("input", () => {
+                    const range = document.querySelector(`.js-range-sync[data-target="${input.id}"]`);
+                    if (range) range.value = input.value;
+                });
+            });
+
+            document.querySelectorAll(".js-preset").forEach(button => {
+                button.addEventListener("click", () => {
+                    const preset = presets[button.dataset.preset];
+                    if (!preset) return;
+                    Object.entries(preset).forEach(([name, value]) => setValue(name, value));
+                });
+            });
+        })();
+    </script>
+}

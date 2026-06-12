@@ -41,6 +41,8 @@ public class NhanVatsController : ControllerCoSo
             return NotFound();
         }
 
+        ViewBag.TaiNguyens = await _unitOfWork.TaiNguyens.GetActiveTaiNguyensAsync();
+
         return View(nhanVat);
     }
 
@@ -53,11 +55,12 @@ public class NhanVatsController : ControllerCoSo
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(YeuCauTaoNhanVat request)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
-            ModelState.AddModelError(nameof(request.Name), "Ten nhan vat la bat buoc.");
+            ModelState.AddModelError(nameof(request.Name), "Tên nhân vật là bắt buộc.");
         }
 
         if (!ModelState.IsValid)
@@ -83,6 +86,261 @@ public class NhanVatsController : ControllerCoSo
         await _unitOfWork.SaveChangesAsync();
 
         return RedirectToAction(nameof(Editor), new { id = nhanVat.Id });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var nhanVat = await LoadNhanVatAsync(id);
+        if (nhanVat is null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Maus = await _unitOfWork.MauNhanVats.LayMauDangHoatDongAsync();
+
+        return View(TaoYeuCauSuaNhanVat(nhanVat));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, YeuCauSuaNhanVat request)
+    {
+        if (id != request.Id)
+        {
+            return BadRequest();
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            ModelState.AddModelError(nameof(request.Name), "Tên nhân vật là bắt buộc.");
+        }
+
+        var nhanVat = await LoadNhanVatAsync(id);
+        if (nhanVat is null)
+        {
+            return NotFound();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Maus = await _unitOfWork.MauNhanVats.LayMauDangHoatDongAsync();
+
+            return View(request);
+        }
+
+        nhanVat.Name = request.Name.Trim();
+        nhanVat.MoTa = request.MoTa;
+        nhanVat.MauNhanVatId = request.MauNhanVatId;
+        nhanVat.Kind = request.Kind;
+        nhanVat.Style = request.Style;
+        nhanVat.UpdatedAt = DateTime.UtcNow;
+
+        nhanVat.CauHinhCoThe ??= new CauHinhCoTheNhanVat { NhanVatId = nhanVat.Id };
+        nhanVat.CauHinhCoThe.OverallHeight = request.CoThe.OverallHeight;
+        nhanVat.CauHinhCoThe.DauScale = request.CoThe.DauScale;
+        nhanVat.CauHinhCoThe.CoScale = request.CoThe.CoScale;
+        nhanVat.CauHinhCoThe.ShoulderWidth = request.CoThe.ShoulderWidth;
+        nhanVat.CauHinhCoThe.NgucScale = request.CoThe.NgucScale;
+        nhanVat.CauHinhCoThe.EoScale = request.CoThe.EoScale;
+        nhanVat.CauHinhCoThe.HipScale = request.CoThe.HipScale;
+        nhanVat.CauHinhCoThe.ArmLength = request.CoThe.ArmLength;
+        nhanVat.CauHinhCoThe.ArmWidth = request.CoThe.ArmWidth;
+        nhanVat.CauHinhCoThe.HandScale = request.CoThe.HandScale;
+        nhanVat.CauHinhCoThe.LegLength = request.CoThe.LegLength;
+        nhanVat.CauHinhCoThe.LegWidth = request.CoThe.LegWidth;
+        nhanVat.CauHinhCoThe.FootScale = request.CoThe.FootScale;
+        nhanVat.CauHinhCoThe.CoTheMass = request.CoThe.CoTheMass;
+
+        nhanVat.CauHinhKhuonMat ??= new CauHinhKhuonMatNhanVat { NhanVatId = nhanVat.Id };
+        nhanVat.CauHinhKhuonMat.KhuonMatWidth = request.KhuonMat.KhuonMatWidth;
+        nhanVat.CauHinhKhuonMat.KhuonMatLength = request.KhuonMat.KhuonMatLength;
+        nhanVat.CauHinhKhuonMat.EyeSize = request.KhuonMat.EyeSize;
+        nhanVat.CauHinhKhuonMat.EyeDistance = request.KhuonMat.EyeDistance;
+        nhanVat.CauHinhKhuonMat.EyeAngle = request.KhuonMat.EyeAngle;
+        nhanVat.CauHinhKhuonMat.NoseHeight = request.KhuonMat.NoseHeight;
+        nhanVat.CauHinhKhuonMat.NoseWidth = request.KhuonMat.NoseWidth;
+        nhanVat.CauHinhKhuonMat.MouthWidth = request.KhuonMat.MouthWidth;
+        nhanVat.CauHinhKhuonMat.LipThickness = request.KhuonMat.LipThickness;
+        nhanVat.CauHinhKhuonMat.EarScale = request.KhuonMat.EarScale;
+        nhanVat.CauHinhKhuonMat.ChinScale = request.KhuonMat.ChinScale;
+        nhanVat.CauHinhKhuonMat.CheekScale = request.KhuonMat.CheekScale;
+        nhanVat.CauHinhKhuonMat.EyebrowAngle = request.KhuonMat.EyebrowAngle;
+        nhanVat.CauHinhKhuonMat.MauDa = request.KhuonMat.MauDa;
+        nhanVat.CauHinhKhuonMat.MauMat = request.KhuonMat.MauMat;
+        nhanVat.CauHinhKhuonMat.MauToc = request.KhuonMat.MauToc;
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Details), new { id = nhanVat.Id });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var nhanVat = await LoadNhanVatAsync(id);
+        if (nhanVat is null)
+        {
+            return NotFound();
+        }
+
+        return View(nhanVat);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LuuCauHinhEditor(int id, YeuCauSuaNhanVat request)
+    {
+        if (id != request.Id)
+        {
+            return BadRequest();
+        }
+
+        var nhanVat = await LoadNhanVatAsync(id);
+        if (nhanVat is null)
+        {
+            return NotFound();
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            request.Name = nhanVat.Name;
+        }
+
+        nhanVat.Name = request.Name.Trim();
+        nhanVat.MoTa = request.MoTa;
+        nhanVat.MauNhanVatId = request.MauNhanVatId;
+        nhanVat.Kind = request.Kind;
+        nhanVat.Style = request.Style;
+        nhanVat.UpdatedAt = DateTime.UtcNow;
+
+        nhanVat.CauHinhCoThe ??= new CauHinhCoTheNhanVat { NhanVatId = nhanVat.Id };
+        nhanVat.CauHinhCoThe.OverallHeight = request.CoThe.OverallHeight;
+        nhanVat.CauHinhCoThe.DauScale = request.CoThe.DauScale;
+        nhanVat.CauHinhCoThe.CoScale = request.CoThe.CoScale;
+        nhanVat.CauHinhCoThe.ShoulderWidth = request.CoThe.ShoulderWidth;
+        nhanVat.CauHinhCoThe.NgucScale = request.CoThe.NgucScale;
+        nhanVat.CauHinhCoThe.EoScale = request.CoThe.EoScale;
+        nhanVat.CauHinhCoThe.HipScale = request.CoThe.HipScale;
+        nhanVat.CauHinhCoThe.ArmLength = request.CoThe.ArmLength;
+        nhanVat.CauHinhCoThe.ArmWidth = request.CoThe.ArmWidth;
+        nhanVat.CauHinhCoThe.HandScale = request.CoThe.HandScale;
+        nhanVat.CauHinhCoThe.LegLength = request.CoThe.LegLength;
+        nhanVat.CauHinhCoThe.LegWidth = request.CoThe.LegWidth;
+        nhanVat.CauHinhCoThe.FootScale = request.CoThe.FootScale;
+        nhanVat.CauHinhCoThe.CoTheMass = request.CoThe.CoTheMass;
+
+        nhanVat.CauHinhKhuonMat ??= new CauHinhKhuonMatNhanVat { NhanVatId = nhanVat.Id };
+        nhanVat.CauHinhKhuonMat.KhuonMatWidth = request.KhuonMat.KhuonMatWidth;
+        nhanVat.CauHinhKhuonMat.KhuonMatLength = request.KhuonMat.KhuonMatLength;
+        nhanVat.CauHinhKhuonMat.EyeSize = request.KhuonMat.EyeSize;
+        nhanVat.CauHinhKhuonMat.EyeDistance = request.KhuonMat.EyeDistance;
+        nhanVat.CauHinhKhuonMat.EyeAngle = request.KhuonMat.EyeAngle;
+        nhanVat.CauHinhKhuonMat.NoseHeight = request.KhuonMat.NoseHeight;
+        nhanVat.CauHinhKhuonMat.NoseWidth = request.KhuonMat.NoseWidth;
+        nhanVat.CauHinhKhuonMat.MouthWidth = request.KhuonMat.MouthWidth;
+        nhanVat.CauHinhKhuonMat.LipThickness = request.KhuonMat.LipThickness;
+        nhanVat.CauHinhKhuonMat.EarScale = request.KhuonMat.EarScale;
+        nhanVat.CauHinhKhuonMat.ChinScale = request.KhuonMat.ChinScale;
+        nhanVat.CauHinhKhuonMat.CheekScale = request.KhuonMat.CheekScale;
+        nhanVat.CauHinhKhuonMat.EyebrowAngle = request.KhuonMat.EyebrowAngle;
+        nhanVat.CauHinhKhuonMat.MauDa = request.KhuonMat.MauDa;
+        nhanVat.CauHinhKhuonMat.MauMat = request.KhuonMat.MauMat;
+        nhanVat.CauHinhKhuonMat.MauToc = request.KhuonMat.MauToc;
+
+        await _unitOfWork.SaveChangesAsync();
+
+        TempData["EditorMessage"] = "Đã lưu cấu hình nhân vật.";
+        return RedirectToAction(nameof(Editor), new { id = nhanVat.Id });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> GanTaiNguyen(int id, YeuCauGanTaiNguyenNhanVat request)
+    {
+        var nhanVat = await LoadNhanVatAsync(id);
+        if (nhanVat is null)
+        {
+            return NotFound();
+        }
+
+        var taiNguyen = await _unitOfWork.TaiNguyens.LayTaiNguyenDangHoatDongKemDiemAsync(request.TaiNguyen3DId);
+        if (taiNguyen is null)
+        {
+            TempData["EditorMessage"] = "Tài nguyên không tồn tại hoặc đã bị khóa.";
+            return RedirectToAction(nameof(Editor), new { id });
+        }
+
+        var nhanVatTaiNguyen = new TaiNguyenNhanVat
+        {
+            NhanVatId = nhanVat.Id,
+            TaiNguyen3DId = taiNguyen.Id,
+            DiemGan = request.DiemGan,
+            TenDiemGanTuyChinh = request.TenDiemGanTuyChinh,
+            MauSac = string.IsNullOrWhiteSpace(request.MauSac) ? taiNguyen.MauSacMacDinh : request.MauSac
+        };
+
+        await _unitOfWork.TaiNguyenNhanVats.AddAsync(nhanVatTaiNguyen);
+        nhanVat.UpdatedAt = DateTime.UtcNow;
+        await _unitOfWork.SaveChangesAsync();
+
+        TempData["EditorMessage"] = "Đã gắn tài nguyên vào nhân vật.";
+        return RedirectToAction(nameof(Editor), new { id = nhanVat.Id });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CapNhatPhuKien(YeuCauCapNhatPhuKienNhanVat request)
+    {
+        var nhanVatTaiNguyen = await _unitOfWork.TaiNguyenNhanVats.LayTaiNguyenNhanVatCuaNguoiDungAsync(
+            request.TaiNguyenNhanVatId,
+            CurrentUserId);
+
+        if (nhanVatTaiNguyen is null || nhanVatTaiNguyen.NhanVatId != request.NhanVatId)
+        {
+            return NotFound();
+        }
+
+        nhanVatTaiNguyen.ViTriX = request.ViTriX;
+        nhanVatTaiNguyen.ViTriY = request.ViTriY;
+        nhanVatTaiNguyen.ViTriZ = request.ViTriZ;
+        nhanVatTaiNguyen.XoayX = request.XoayX;
+        nhanVatTaiNguyen.XoayY = request.XoayY;
+        nhanVatTaiNguyen.XoayZ = request.XoayZ;
+        nhanVatTaiNguyen.TiLeX = request.TiLeX;
+        nhanVatTaiNguyen.TiLeY = request.TiLeY;
+        nhanVatTaiNguyen.TiLeZ = request.TiLeZ;
+        nhanVatTaiNguyen.MauSac = request.MauSac;
+        nhanVatTaiNguyen.DoKimLoai = request.DoKimLoai;
+        nhanVatTaiNguyen.DoNham = request.DoNham;
+        nhanVatTaiNguyen.UpdatedAt = DateTime.UtcNow;
+        nhanVatTaiNguyen.NhanVat.UpdatedAt = DateTime.UtcNow;
+
+        await _unitOfWork.SaveChangesAsync();
+
+        TempData["EditorMessage"] = "Đã lưu thông số phụ kiện.";
+        return RedirectToAction(nameof(Editor), new { id = request.NhanVatId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> GoTaiNguyen(int nhanVatId, int taiNguyenNhanVatId)
+    {
+        var nhanVatTaiNguyen = await _unitOfWork.TaiNguyenNhanVats.LayTaiNguyenNhanVatCuaNguoiDungAsync(
+            taiNguyenNhanVatId,
+            CurrentUserId);
+
+        if (nhanVatTaiNguyen is null || nhanVatTaiNguyen.NhanVatId != nhanVatId)
+        {
+            return NotFound();
+        }
+
+        nhanVatTaiNguyen.NhanVat.UpdatedAt = DateTime.UtcNow;
+        _unitOfWork.TaiNguyenNhanVats.Remove(nhanVatTaiNguyen);
+        await _unitOfWork.SaveChangesAsync();
+
+        TempData["EditorMessage"] = "Đã gỡ tài nguyên khỏi nhân vật.";
+        return RedirectToAction(nameof(Editor), new { id = nhanVatId });
     }
 
     [HttpPost]
@@ -194,6 +452,7 @@ public class NhanVatsController : ControllerCoSo
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Duplicate(int id)
     {
         var source = await LoadNhanVatAsync(id);
@@ -280,7 +539,9 @@ public class NhanVatsController : ControllerCoSo
     }
 
     [HttpPost]
-    public async Task<IActionResult> Delete(int id)
+    [ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var nhanVat = await _unitOfWork.NhanVats.LayNhanVatCuaNguoiDungAsync(id, CurrentUserId);
 
@@ -298,6 +559,55 @@ public class NhanVatsController : ControllerCoSo
     private async Task<NhanVat?> LoadNhanVatAsync(int id)
     {
         return await _unitOfWork.NhanVats.LayNhanVatChoTrinhSuaAsync(id, CurrentUserId);
+    }
+
+    private static YeuCauSuaNhanVat TaoYeuCauSuaNhanVat(NhanVat nhanVat)
+    {
+        return new YeuCauSuaNhanVat
+        {
+            Id = nhanVat.Id,
+            Name = nhanVat.Name,
+            MoTa = nhanVat.MoTa,
+            MauNhanVatId = nhanVat.MauNhanVatId,
+            Kind = nhanVat.Kind,
+            Style = nhanVat.Style,
+            CoThe = nhanVat.CauHinhCoThe is null ? new YeuCauCauHinhCoThe() : new YeuCauCauHinhCoThe
+            {
+                OverallHeight = nhanVat.CauHinhCoThe.OverallHeight,
+                DauScale = nhanVat.CauHinhCoThe.DauScale,
+                CoScale = nhanVat.CauHinhCoThe.CoScale,
+                ShoulderWidth = nhanVat.CauHinhCoThe.ShoulderWidth,
+                NgucScale = nhanVat.CauHinhCoThe.NgucScale,
+                EoScale = nhanVat.CauHinhCoThe.EoScale,
+                HipScale = nhanVat.CauHinhCoThe.HipScale,
+                ArmLength = nhanVat.CauHinhCoThe.ArmLength,
+                ArmWidth = nhanVat.CauHinhCoThe.ArmWidth,
+                HandScale = nhanVat.CauHinhCoThe.HandScale,
+                LegLength = nhanVat.CauHinhCoThe.LegLength,
+                LegWidth = nhanVat.CauHinhCoThe.LegWidth,
+                FootScale = nhanVat.CauHinhCoThe.FootScale,
+                CoTheMass = nhanVat.CauHinhCoThe.CoTheMass
+            },
+            KhuonMat = nhanVat.CauHinhKhuonMat is null ? new YeuCauCauHinhKhuonMat() : new YeuCauCauHinhKhuonMat
+            {
+                KhuonMatWidth = nhanVat.CauHinhKhuonMat.KhuonMatWidth,
+                KhuonMatLength = nhanVat.CauHinhKhuonMat.KhuonMatLength,
+                EyeSize = nhanVat.CauHinhKhuonMat.EyeSize,
+                EyeDistance = nhanVat.CauHinhKhuonMat.EyeDistance,
+                EyeAngle = nhanVat.CauHinhKhuonMat.EyeAngle,
+                NoseHeight = nhanVat.CauHinhKhuonMat.NoseHeight,
+                NoseWidth = nhanVat.CauHinhKhuonMat.NoseWidth,
+                MouthWidth = nhanVat.CauHinhKhuonMat.MouthWidth,
+                LipThickness = nhanVat.CauHinhKhuonMat.LipThickness,
+                EarScale = nhanVat.CauHinhKhuonMat.EarScale,
+                ChinScale = nhanVat.CauHinhKhuonMat.ChinScale,
+                CheekScale = nhanVat.CauHinhKhuonMat.CheekScale,
+                EyebrowAngle = nhanVat.CauHinhKhuonMat.EyebrowAngle,
+                MauDa = nhanVat.CauHinhKhuonMat.MauDa,
+                MauMat = nhanVat.CauHinhKhuonMat.MauMat,
+                MauToc = nhanVat.CauHinhKhuonMat.MauToc
+            }
+        };
     }
 }
 

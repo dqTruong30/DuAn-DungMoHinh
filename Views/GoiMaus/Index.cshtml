@@ -20,8 +20,8 @@
     {
         <tr>
             <td>@item.Name</td>
-            <td>@item.Kind</td>
-            <td>@item.Style</td>
+            <td>@item.Kind.GetDisplayName()</td>
+            <td>@item.Style.GetDisplayName()</td>
             <td class="text-end"><a asp-action="Details" asp-route-id="@item.Id">Chi tiet</a></td>
         </tr>
     }

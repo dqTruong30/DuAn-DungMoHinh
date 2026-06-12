@@ -17,6 +17,25 @@ public class YeuCauTaoNhanVat
     public PhongCachNhanVat Style { get; set; } = PhongCachNhanVat.BinhThuong;
 }
 
+public class YeuCauSuaNhanVat
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public string? MoTa { get; set; }
+
+    public int? MauNhanVatId { get; set; }
+
+    public LoaiNhanVat Kind { get; set; } = LoaiNhanVat.TrungTinh;
+
+    public PhongCachNhanVat Style { get; set; } = PhongCachNhanVat.BinhThuong;
+
+    public YeuCauCauHinhCoThe CoThe { get; set; } = new();
+
+    public YeuCauCauHinhKhuonMat KhuonMat { get; set; } = new();
+}
+
 public class YeuCauCauHinhCoThe
 {
     public decimal OverallHeight { get; set; } = 1.00m;

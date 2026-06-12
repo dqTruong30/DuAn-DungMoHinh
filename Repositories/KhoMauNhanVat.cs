@@ -14,6 +14,16 @@ public class KhoMauNhanVat : KhoDuLieuCoSo<MauNhanVat>, IKhoMauNhanVat
     {
     }
 
+    public async Task<List<MauNhanVat>> LayTatCaMauAsync()
+    {
+        return await Set
+            .OrderBy(mau => mau.IsActive ? 0 : 1)
+            .ThenBy(mau => mau.Style)
+            .ThenBy(mau => mau.Kind)
+            .ThenBy(mau => mau.Name)
+            .ToListAsync();
+    }
+
     public async Task<List<MauNhanVat>> LayMauDangHoatDongAsync()
     {
         return await Set

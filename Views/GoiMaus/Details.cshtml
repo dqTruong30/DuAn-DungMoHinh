@@ -8,9 +8,9 @@
 
 <dl class="row">
     <dt class="col-sm-3">Loai</dt>
-    <dd class="col-sm-9">@Model.Kind</dd>
+    <dd class="col-sm-9">@Model.Kind.GetDisplayName()</dd>
     <dt class="col-sm-3">Phong cach</dt>
-    <dd class="col-sm-9">@Model.Style</dd>
+    <dd class="col-sm-9">@Model.Style.GetDisplayName()</dd>
     <dt class="col-sm-3">Mau nhan vat</dt>
     <dd class="col-sm-9">@Model.MauNhanVat?.Name</dd>
 </dl>

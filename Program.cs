@@ -76,6 +76,7 @@ static async Task TaoDuLieuDangNhapMauAsync(WebApplication app)
     using var scope = app.Services.CreateScope();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<NguoiDungUngDung>>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     foreach (var roleName in new[] { VaiTroHeThong.Admin, VaiTroHeThong.User })
     {
@@ -98,6 +99,8 @@ static async Task TaoDuLieuDangNhapMauAsync(WebApplication app)
         password: "User123",
         tenHienThi: "Người dùng mẫu",
         roleName: VaiTroHeThong.User);
+
+    await TaoMauNhanVatMacDinhAsync(dbContext);
 }
 
 static async Task TaoTaiKhoanNeuChuaCoAsync(
@@ -130,5 +133,50 @@ static async Task TaoTaiKhoanNeuChuaCoAsync(
     {
         await userManager.AddToRoleAsync(user, roleName);
     }
+}
+
+static async Task TaoMauNhanVatMacDinhAsync(ApplicationDbContext dbContext)
+{
+    var mauMacDinhs = new[]
+    {
+        new MauNhanVat
+        {
+            Name = "Nữ pháp sư huyền thuật",
+            MoTa = "Mẫu fantasy với áo choàng xanh, hiệu ứng phép thuật và phong cách nhân vật nổi bật.",
+            Kind = LoaiNhanVat.Nu,
+            Style = PhongCachNhanVat.GiaTuong,
+            ModelUrl = "/models/templates/fantasy-mage.glb",
+            IsActive = true
+        },
+        new MauNhanVat
+        {
+            Name = "Nam chiến binh cơ bản",
+            MoTa = "Mẫu thân hình cân đối, phù hợp để phát triển nhân vật phiêu lưu hoặc chiến đấu.",
+            Kind = LoaiNhanVat.Nam,
+            Style = PhongCachNhanVat.BinhThuong,
+            ModelUrl = "/models/templates/male-warrior.glb",
+            IsActive = true
+        },
+        new MauNhanVat
+        {
+            Name = "Chibi đáng yêu",
+            MoTa = "Mẫu đầu to, dáng nhỏ gọn, phù hợp nhân vật vui nhộn hoặc phong cách anime.",
+            Kind = LoaiNhanVat.ChibiNu,
+            Style = PhongCachNhanVat.Chibi,
+            ModelUrl = "/models/templates/chibi-cute.glb",
+            IsActive = true
+        }
+    };
+
+    foreach (var mau in mauMacDinhs)
+    {
+        var daTonTai = await dbContext.MauNhanVats.AnyAsync(item => item.ModelUrl == mau.ModelUrl);
+        if (!daTonTai)
+        {
+            dbContext.MauNhanVats.Add(mau);
+        }
+    }
+
+    await dbContext.SaveChangesAsync();
 }
 

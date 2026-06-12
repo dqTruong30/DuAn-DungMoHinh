@@ -1,39 +1,86 @@
 @model IEnumerable<DungMoHinh.Models.TaiNguyen3D>
 
 @{
-    ViewData["Title"] = "Tài nguyên";
+    ViewData["Title"] = "Thư viện 3D";
+    var laAdmin = User.IsInRole(VaiTroHeThong.Admin);
 }
 
 <div class="page-heading">
     <div>
         <span class="eyebrow">Thư viện 3D</span>
-        <h1>Tài nguyên</h1>
-        <p>Danh sách model, phụ kiện, vật liệu, texture và pose có thể gắn vào nhân vật.</p>
+        <h1>Tài nguyên 3D</h1>
+        <p>Quản lý model, tóc, trang phục, phụ kiện, vật liệu, texture và pose có thể gắn vào nhân vật.</p>
     </div>
+    @if (laAdmin)
+    {
+        <div class="toolbar">
+            <a class="btn btn-primary" asp-action="Create">Thêm tài nguyên</a>
+        </div>
+    }
 </div>
 
-<div class="table-wrap">
-    <table class="table align-middle">
-        <thead>
-            <tr>
-                <th>Tên</th>
-                <th>Loại</th>
-                <th>Điểm gắn</th>
-                <th>Đang hoạt động</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td><strong>@item.Name</strong></td>
-                <td><span class="status-pill">@item.Type</span></td>
-                <td>@item.DefaultDiemGan</td>
-                <td>@item.IsActive</td>
-                <td class="text-end"><a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiết</a></td>
-            </tr>
-        }
-        </tbody>
-    </table>
+<div class="toolbar mb-3">
+    <a class="btn btn-sm btn-outline-secondary" asp-action="Index">Tất cả</a>
+    @foreach (LoaiTaiNguyen type in Enum.GetValues<LoaiTaiNguyen>())
+    {
+        <a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-type="@type">@type</a>
+    }
 </div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <h2>Chưa có tài nguyên 3D</h2>
+        <p>Admin có thể thêm model, phụ kiện hoặc texture để người dùng gắn vào nhân vật.</p>
+        @if (laAdmin)
+        {
+            <a class="btn btn-primary" asp-action="Create">Thêm tài nguyên đầu tiên</a>
+        }
+    </div>
+}
+else
+{
+    <div class="table-wrap">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Tên tài nguyên</th>
+                    <th>Loại</th>
+                    <th>Điểm gắn</th>
+                    <th>Chỉnh từng phần</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.Name</strong>
+                        <div class="text-muted small">@(string.IsNullOrWhiteSpace(item.MoTa) ? "Chưa có mô tả" : item.MoTa)</div>
+                    </td>
+                    <td><span class="status-pill">@item.Type</span></td>
+                    <td>@item.DefaultDiemGan</td>
+                    <td>@(item.SupportsPartAdjustment ? $"{item.AdjustmentPoints.Count} điểm" : "Không")</td>
+                    <td>
+                        <span class="status-pill @(item.IsActive ? string.Empty : "status-muted")">
+                            @(item.IsActive ? "Đang dùng" : "Đã khóa")
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <div class="toolbar justify-content-end">
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
+                            @if (laAdmin)
+                            {
+                                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                                <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

@@ -2,23 +2,107 @@
 
 @{
     ViewData["Title"] = "Chi tiết tài nguyên";
+    var laAdmin = User.IsInRole(VaiTroHeThong.Admin);
 }
 
-<h1>@Model.Name</h1>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Chi tiết tài nguyên</span>
+        <h1>@Model.Name</h1>
+        <p>@(string.IsNullOrWhiteSpace(Model.MoTa) ? "Tài nguyên này chưa có mô tả." : Model.MoTa)</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-outline-secondary" asp-action="Index">Quay lại</a>
+        @if (laAdmin)
+        {
+            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Sửa tài nguyên</a>
+        }
+    </div>
+</div>
 
-<dl class="row">
-    <dt class="col-sm-3">Loại</dt>
-    <dd class="col-sm-9">@Model.Type</dd>
-    <dt class="col-sm-3">Đường dẫn file</dt>
-    <dd class="col-sm-9">@Model.DuongDanFile</dd>
-    <dt class="col-sm-3">Màu mặc định</dt>
-    <dd class="col-sm-9">@Model.MauSacMacDinh</dd>
-</dl>
+<div class="detail-grid">
+    <section class="panel">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">Thông tin chính</h2>
+                <p class="panel-subtitle">Loại, vị trí gắn và trạng thái của tài nguyên.</p>
+            </div>
+        </div>
+        <dl class="detail-list">
+            <dt>Loại</dt>
+            <dd><span class="status-pill">@Model.Type</span></dd>
+            <dt>Điểm gắn mặc định</dt>
+            <dd>@Model.DefaultDiemGan</dd>
+            <dt>Màu mặc định</dt>
+            <dd>
+                @if (!string.IsNullOrWhiteSpace(Model.MauSacMacDinh))
+                {
+                    <span class="color-chip" style="--chip-color:@Model.MauSacMacDinh"></span>
+                    @Model.MauSacMacDinh
+                }
+                else
+                {
+                    <span>Chưa có</span>
+                }
+            </dd>
+            <dt>Trạng thái</dt>
+            <dd>@(Model.IsActive ? "Đang hoạt động" : "Đã khóa")</dd>
+        </dl>
+    </section>
 
-<h2 class="h4">Điểm chỉnh phụ kiện</h2>
-<ul class="list-group">
-@foreach (var point in Model.AdjustmentPoints)
-{
-    <li class="list-group-item">@point.Name (@point.GiaTriNhoNhat - @point.GiaTriLonNhat)</li>
-}
-</ul>
+    <section class="panel">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">File và texture</h2>
+                <p class="panel-subtitle">Đường dẫn dùng cho giai đoạn dựng model 3D.</p>
+            </div>
+        </div>
+        <dl class="detail-list">
+            <dt>File model</dt>
+            <dd class="text-break">@Model.DuongDanFile</dd>
+            <dt>Ảnh đại diện</dt>
+            <dd class="text-break">@(string.IsNullOrWhiteSpace(Model.AnhDaiDienUrl) ? "Chưa có" : Model.AnhDaiDienUrl)</dd>
+            <dt>Texture</dt>
+            <dd class="text-break">@(string.IsNullOrWhiteSpace(Model.KetCauUrl) ? "Chưa có" : Model.KetCauUrl)</dd>
+        </dl>
+    </section>
+</div>
+
+<section class="panel mt-3">
+    <div class="panel-header">
+        <div>
+            <h2 class="panel-title">Điểm chỉnh phụ kiện</h2>
+            <p class="panel-subtitle">Các phần nhỏ có thể chỉnh riêng, ví dụ gọng kính, vành nón hoặc dây đeo.</p>
+        </div>
+    </div>
+    @if (Model.AdjustmentPoints.Any())
+    {
+        <div class="table-wrap shadow-none">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Tên điểm chỉnh</th>
+                        <th>Mesh node</th>
+                        <th>Khoảng giá trị</th>
+                        <th>Mặc định</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var point in Model.AdjustmentPoints)
+                {
+                    <tr>
+                        <td><strong>@point.Name</strong></td>
+                        <td>@(string.IsNullOrWhiteSpace(point.MeshNodeName) ? "Chưa khai báo" : point.MeshNodeName)</td>
+                        <td>@point.GiaTriNhoNhat - @point.GiaTriLonNhat</td>
+                        <td>@point.GiaTriMacDinh</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted mb-0">Tài nguyên này chưa khai báo điểm chỉnh từng phần.</p>
+    }
+</section>

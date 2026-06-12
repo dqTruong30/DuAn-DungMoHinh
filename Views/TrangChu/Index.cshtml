@@ -2,65 +2,88 @@
     ViewData["Title"] = "Trang chủ";
 }
 
-<section class="hero-studio">
+<section class="hero-studio home-intro">
     <div class="hero-copy">
-        <span class="eyebrow">3D Character Studio</span>
-        <h1>Thiết kế nhân vật 3D theo ảnh, mẫu có sẵn và phong cách riêng.</h1>
+        <span class="eyebrow">Hệ thống dựng nhân vật 3D</span>
+        <h1>Tạo, tùy chỉnh và lưu nhân vật 3D theo phong cách riêng.</h1>
         <p>
-            Tạo nhân vật nam, nữ, chibi hoặc bình thường; tùy chỉnh tỷ lệ cơ thể,
-            khuôn mặt, phụ kiện và tài nguyên 3D trong một không gian làm việc rõ ràng.
+            Website hỗ trợ người dùng tạo nhân vật nam, nữ, chibi hoặc nhân vật bình thường;
+            tùy chỉnh cơ thể, khuôn mặt, màu sắc, phụ kiện và lưu lại cấu hình để tiếp tục chỉnh sửa về sau.
         </p>
+
+        <div class="home-feature-list" aria-label="Các điểm chính của hệ thống">
+            <span>Chọn mẫu nhân vật</span>
+            <span>Chỉnh thông số 3D</span>
+            <span>Gắn phụ kiện</span>
+            <span>Lưu cấu hình</span>
+        </div>
 
         <div class="toolbar">
             <a class="btn btn-light" asp-controller="NhanVats" asp-action="Create">Tạo nhân vật</a>
-            <a class="btn btn-outline-secondary" asp-controller="AnhTaiLens" asp-action="Index">Tải ảnh mẫu</a>
+            <a class="btn btn-outline-secondary" asp-controller="NhanVats" asp-action="Index">Xem nhân vật</a>
         </div>
     </div>
 
-    <div class="preview-stage" aria-label="Minh họa không gian dựng nhân vật">
-        <div class="stage-label">Live preview</div>
+    <div class="preview-stage" aria-label="Minh họa không gian dựng nhân vật 3D">
+        <div class="stage-label">Xem trước 3D</div>
         <div class="avatar-preview"></div>
         <div class="preview-grid"></div>
     </div>
 </section>
 
-<section class="metric-grid mb-4">
-    <div class="metric-card">
-        <span>Kiểu nhân vật</span>
-        <strong>4</strong>
-        <small>Nam, nữ, chibi nam, chibi nữ</small>
+<section class="home-section">
+    <div class="section-heading">
+        <span class="eyebrow">Điều hướng nhanh</span>
+        <h2>Bắt đầu công việc chính</h2>
+        <p>Truy cập nhanh các màn hình quan trọng nhất trong quy trình tạo nhân vật 3D.</p>
     </div>
-    <div class="metric-card">
-        <span>Bộ chỉnh sửa</span>
-        <strong>3</strong>
-        <small>Cơ thể, khuôn mặt, phụ kiện</small>
-    </div>
-    <div class="metric-card">
-        <span>Nguồn dữ liệu</span>
-        <strong>2</strong>
-        <small>Mẫu 3D và ảnh tải lên</small>
-    </div>
-    <div class="metric-card">
-        <span>Đầu ra</span>
-        <strong>GLB</strong>
-        <small>Mở rộng thêm PNG, OBJ, FBX</small>
+
+    <div class="quick-action-grid">
+        <a class="quick-action-card" asp-controller="NhanVats" asp-action="Create">
+            <span class="quick-action-mark">01</span>
+            <strong>Tạo nhân vật</strong>
+            <small>Khởi tạo nhân vật mới từ loại, phong cách và mẫu có sẵn.</small>
+        </a>
+        <a class="quick-action-card" asp-controller="NhanVats" asp-action="Index">
+            <span class="quick-action-mark">02</span>
+            <strong>Xem nhân vật</strong>
+            <small>Mở danh sách nhân vật đã tạo để xem chi tiết hoặc chỉnh sửa tiếp.</small>
+        </a>
+        <a class="quick-action-card" asp-controller="TaiNguyens" asp-action="Index">
+            <span class="quick-action-mark">03</span>
+            <strong>Xem thư viện 3D</strong>
+            <small>Duyệt tóc, trang phục, phụ kiện, vật liệu và tài nguyên gắn vào nhân vật.</small>
+        </a>
+        <a class="quick-action-card" asp-controller="AnhTaiLens" asp-action="Index">
+            <span class="quick-action-mark">04</span>
+            <strong>Tải ảnh</strong>
+            <small>Tải ảnh nhân vật hoặc phụ kiện để phục vụ bước phân tích và tạo gợi ý.</small>
+        </a>
     </div>
 </section>
 
-<section class="workflow-grid">
-    <article class="workflow-card">
-        <span class="step">1</span>
-        <h2>Chọn nền nhân vật</h2>
-        <p>Bắt đầu từ mẫu nam, nữ, chibi hoặc tạo theo ảnh người dùng tải lên.</p>
-    </article>
-    <article class="workflow-card">
-        <span class="step">2</span>
-        <h2>Tùy chỉnh chi tiết</h2>
-        <p>Điều chỉnh tỷ lệ cơ thể, màu sắc, khuôn mặt, phụ kiện và vị trí gắn.</p>
-    </article>
-    <article class="workflow-card">
-        <span class="step">3</span>
-        <h2>Lưu và xuất bản</h2>
-        <p>Lưu cấu hình nhân vật, quản lý trong thư viện và chuẩn bị xuất file 3D.</p>
-    </article>
+<section class="home-section">
+    <div class="section-heading">
+        <span class="eyebrow">Quy trình sử dụng</span>
+        <h2>Ba bước tạo nhân vật</h2>
+        <p>Luồng thao tác được chia rõ để người dùng dễ bắt đầu, dễ chỉnh sửa và dễ lưu kết quả.</p>
+    </div>
+
+    <div class="workflow-grid">
+        <article class="workflow-card">
+            <span class="step">1</span>
+            <h2>Chọn mẫu</h2>
+            <p>Chọn loại nhân vật, phong cách và mẫu nền phù hợp để tạo cấu hình ban đầu.</p>
+        </article>
+        <article class="workflow-card">
+            <span class="step">2</span>
+            <h2>Tùy chỉnh</h2>
+            <p>Điều chỉnh tỷ lệ cơ thể, khuôn mặt, màu sắc, phụ kiện và tài nguyên 3D đã chọn.</p>
+        </article>
+        <article class="workflow-card">
+            <span class="step">3</span>
+            <h2>Lưu hoặc xuất</h2>
+            <p>Lưu nhân vật vào thư viện cá nhân, sau đó tiếp tục chỉnh sửa hoặc chuẩn bị xuất file.</p>
+        </article>
+    </div>
 </section>

@@ -2,15 +2,86 @@
 
 @{
     ViewData["Title"] = "Chi tiết mẫu";
+    var laAdmin = User.IsInRole(VaiTroHeThong.Admin);
+    var coAnh = !string.IsNullOrWhiteSpace(Model.AnhDaiDienUrl);
+    var kindClass = $"kind-{Model.Kind.ToString().ToLowerInvariant()}";
+    var styleClass = $"style-{Model.Style.ToString().ToLowerInvariant()}";
 }
 
-<h1>@Model.Name</h1>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Chi tiết mẫu</span>
+        <h1>@Model.Name</h1>
+        <p>@(string.IsNullOrWhiteSpace(Model.MoTa) ? "Mẫu này chưa có mô tả." : Model.MoTa)</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-outline-secondary" asp-action="Index">Quay lại</a>
+        @if (laAdmin)
+        {
+            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Sửa mẫu</a>
+        }
+    </div>
+</div>
 
-<dl class="row">
-    <dt class="col-sm-3">Loại</dt>
-    <dd class="col-sm-9">@Model.Kind</dd>
-    <dt class="col-sm-3">Phong cách</dt>
-    <dd class="col-sm-9">@Model.Style</dd>
-    <dt class="col-sm-3">Đường dẫn model</dt>
-    <dd class="col-sm-9">@Model.ModelUrl</dd>
-</dl>
+<div class="template-detail-layout">
+    <section class="template-detail-preview @kindClass @styleClass">
+        <div class="stage-label">Preview mẫu</div>
+        @if (coAnh)
+        {
+            <img src="@Model.AnhDaiDienUrl" alt="@Model.Name" />
+        }
+        else
+        {
+            <div class="fantasy-avatar fantasy-avatar-large @kindClass @styleClass" aria-hidden="true">
+                <span class="magic-aura"></span>
+                <span class="magic-orb"></span>
+                <span class="fantasy-hair"></span>
+                <span class="fantasy-head"><i></i><i></i></span>
+                <span class="fantasy-collar"></span>
+                <span class="fantasy-robe"></span>
+                <span class="fantasy-belt"></span>
+                <span class="fantasy-arm fantasy-arm-left"></span>
+                <span class="fantasy-arm fantasy-arm-right"></span>
+                <span class="fantasy-leg fantasy-leg-left"></span>
+                <span class="fantasy-leg fantasy-leg-right"></span>
+            </div>
+        }
+        <div class="preview-grid"></div>
+    </section>
+
+    <div class="control-stack">
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Thông tin mẫu</h2>
+                    <p class="panel-subtitle">Loại, phong cách và trạng thái sử dụng.</p>
+                </div>
+            </div>
+            <dl class="detail-list">
+                <dt>Loại</dt>
+                <dd><span class="status-pill">@Model.Kind.GetDisplayName()</span></dd>
+                <dt>Phong cách</dt>
+                <dd>@Model.Style.GetDisplayName()</dd>
+                <dt>Trạng thái</dt>
+                <dd>@(Model.IsActive ? "Đang hoạt động" : "Đã khóa")</dd>
+                <dt>Cập nhật</dt>
+                <dd>@(Model.UpdatedAt ?? Model.CreatedAt)</dd>
+            </dl>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Cấu hình mặc định</h2>
+                    <p class="panel-subtitle">Đường dẫn model và ảnh đại diện dùng khi tạo nhân vật.</p>
+                </div>
+            </div>
+            <dl class="detail-list">
+                <dt>Model</dt>
+                <dd class="text-break">@Model.ModelUrl</dd>
+                <dt>Ảnh đại diện</dt>
+                <dd class="text-break">@(coAnh ? Model.AnhDaiDienUrl : "Chưa có")</dd>
+            </dl>
+        </section>
+    </div>
+</div>

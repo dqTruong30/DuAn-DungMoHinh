@@ -1,0 +1,64 @@
+@model DungMoHinh.ViewModels.YeuCauMauNhanVat
+
+@{
+    ViewData["Title"] = "Sửa mẫu nhân vật";
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Quản lý mẫu</span>
+        <h1>Sửa mẫu nhân vật</h1>
+        <p>Cập nhật thông tin mẫu nền, đường dẫn model và trạng thái sử dụng.</p>
+    </div>
+</div>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="panel">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-grid-compact">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên mẫu</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Kind" class="form-label">Loại nhân vật</label>
+            <select asp-for="Kind" class="form-select" asp-items="Html.GetEnumSelectList<LoaiNhanVat>()"></select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Style" class="form-label">Phong cách</label>
+            <select asp-for="Style" class="form-select" asp-items="Html.GetEnumSelectList<PhongCachNhanVat>()"></select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Trạng thái</label>
+            <div class="form-check form-switch pt-2">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label">Cho phép sử dụng</label>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label">Mô tả</label>
+        <textarea asp-for="MoTa" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="form-grid-compact">
+        <div class="mb-3">
+            <label asp-for="ModelUrl" class="form-label">Đường dẫn model</label>
+            <input asp-for="ModelUrl" class="form-control" />
+            <span asp-validation-for="ModelUrl" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="AnhDaiDienUrl" class="form-label">Ảnh đại diện</label>
+            <input asp-for="AnhDaiDienUrl" class="form-control" />
+        </div>
+    </div>
+    <div class="toolbar">
+        <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Hủy</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
