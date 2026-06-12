@@ -1,0 +1,18 @@
+@model DungMoHinh.Models.NhanVat
+
+@{
+    ViewData["Title"] = "Xóa nhân vật";
+}
+
+<div class="empty-state danger-state">
+    <h1>Xóa nhân vật</h1>
+    <p>
+        Bạn có chắc muốn xóa nhân vật <strong>@Model.Name</strong> khỏi hệ thống không?
+        Hành động này sẽ xóa cấu hình cơ thể, khuôn mặt, phụ kiện đã gắn và không thể hoàn tác.
+    </p>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="toolbar justify-content-center">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Xóa nhân vật</button>
+        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Hủy</a>
+    </form>
+</div>

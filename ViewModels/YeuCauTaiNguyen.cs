@@ -27,6 +27,31 @@ public class YeuCauTaoTaiNguyen
     public bool IsUserGenerated { get; set; }
 }
 
+public class YeuCauSuaTaiNguyen : YeuCauTaoTaiNguyen
+{
+    public int Id { get; set; }
+
+    public bool IsActive { get; set; } = true;
+}
+
+public class YeuCauGanTaiNguyenNhanVat
+{
+    public int TaiNguyen3DId { get; set; }
+
+    public DiemGan DiemGan { get; set; } = DiemGan.TuyChinh;
+
+    public string? TenDiemGanTuyChinh { get; set; }
+
+    public string? MauSac { get; set; }
+}
+
+public class YeuCauCapNhatPhuKienNhanVat : YeuCauBienDoiTaiNguyen
+{
+    public int NhanVatId { get; set; }
+
+    public int TaiNguyenNhanVatId { get; set; }
+}
+
 public class TaiNguyenNhanVatCreateRequest
 {
     public int TaiNguyen3DId { get; set; }

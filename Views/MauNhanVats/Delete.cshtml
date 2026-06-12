@@ -1,0 +1,31 @@
+@model DungMoHinh.Models.MauNhanVat
+
+@{
+    ViewData["Title"] = "Xóa mẫu nhân vật";
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Quản lý mẫu</span>
+        <h1>Xóa mẫu nhân vật</h1>
+        <p>Mẫu sẽ được khóa để không còn xuất hiện cho người dùng mới, dữ liệu nhân vật cũ vẫn được giữ.</p>
+    </div>
+</div>
+
+<section class="panel danger-state">
+    <h2 class="panel-title">@Model.Name</h2>
+    <p class="panel-subtitle">Bạn có chắc muốn khóa mẫu này không?</p>
+    <dl class="detail-list mt-3">
+        <dt>Loại</dt>
+        <dd>@Model.Kind.GetDisplayName()</dd>
+        <dt>Phong cách</dt>
+        <dd>@Model.Style.GetDisplayName()</dd>
+        <dt>Model</dt>
+        <dd class="text-break">@Model.ModelUrl</dd>
+    </dl>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="toolbar mt-4">
+        @Html.AntiForgeryToken()
+        <button class="btn btn-outline-danger" type="submit">Xóa mẫu</button>
+        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Hủy</a>
+    </form>
+</section>

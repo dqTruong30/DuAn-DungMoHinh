@@ -1,0 +1,74 @@
+@model DungMoHinh.ViewModels.YeuCauTaoTaiNguyen
+
+@{
+    ViewData["Title"] = "Thêm tài nguyên 3D";
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Quản lý thư viện</span>
+        <h1>Thêm tài nguyên 3D</h1>
+        <p>Tạo model, phụ kiện hoặc texture để người dùng gắn vào nhân vật.</p>
+    </div>
+</div>
+
+<form asp-action="Create" method="post" class="panel">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-grid-compact">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên tài nguyên</label>
+            <input asp-for="Name" class="form-control" placeholder="Kính tròn" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Type" class="form-label">Loại tài nguyên</label>
+            <select asp-for="Type" class="form-select" asp-items="Html.GetEnumSelectList<LoaiTaiNguyen>()"></select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="DefaultDiemGan" class="form-label">Điểm gắn mặc định</label>
+            <select asp-for="DefaultDiemGan" class="form-select" asp-items="Html.GetEnumSelectList<DiemGan>()"></select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="MauSacMacDinh" class="form-label">Màu mặc định</label>
+            <input asp-for="MauSacMacDinh" type="color" class="form-control form-control-color w-100" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label">Mô tả</label>
+        <textarea asp-for="MoTa" class="form-control" rows="3" placeholder="Mô tả cách dùng tài nguyên này trong editor"></textarea>
+    </div>
+    <div class="form-grid-compact">
+        <div class="mb-3">
+            <label asp-for="DuongDanFile" class="form-label">Đường dẫn file model</label>
+            <input asp-for="DuongDanFile" class="form-control" placeholder="/models/accessories/glasses.glb" />
+            <span asp-validation-for="DuongDanFile" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="AnhDaiDienUrl" class="form-label">Ảnh đại diện</label>
+            <input asp-for="AnhDaiDienUrl" class="form-control" placeholder="/images/assets/glasses.png" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="KetCauUrl" class="form-label">Texture</label>
+            <input asp-for="KetCauUrl" class="form-control" placeholder="/textures/glasses.png" />
+        </div>
+    </div>
+    <div class="toolbar mb-3">
+        <div class="form-check form-switch">
+            <input asp-for="SupportsPartAdjustment" class="form-check-input" />
+            <label asp-for="SupportsPartAdjustment" class="form-check-label">Có hỗ trợ chỉnh từng phần</label>
+        </div>
+        <div class="form-check form-switch">
+            <input asp-for="IsUserGenerated" class="form-check-input" />
+            <label asp-for="IsUserGenerated" class="form-check-label">Do người dùng tải lên</label>
+        </div>
+    </div>
+    <div class="toolbar">
+        <button class="btn btn-primary" type="submit">Lưu tài nguyên</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Hủy</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

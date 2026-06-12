@@ -1,29 +1,199 @@
+@using System.Globalization
 @model DungMoHinh.Models.NhanVat
 
 @{
     ViewData["Title"] = "Chi tiết nhân vật";
+
+    var coThe = Model.CauHinhCoThe ?? new CauHinhCoTheNhanVat();
+    var khuonMat = Model.CauHinhKhuonMat ?? new CauHinhKhuonMatNhanVat();
+    var phuKiens = Model.TaiNguyenNhanVats
+        .OrderBy(item => item.TaiNguyen3D.Type)
+        .ThenBy(item => item.TaiNguyen3D.Name)
+        .ToList();
+
+    string Num(decimal value) => value.ToString("0.##", CultureInfo.InvariantCulture);
+    string Date(DateTime value) => value.ToLocalTime().ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+    string Color(string? value, string fallback) => string.IsNullOrWhiteSpace(value) ? fallback : value;
+
+    var mauDa = Color(khuonMat.MauDa, "#f2c6a0");
+    var mauToc = Color(khuonMat.MauToc, "#2d211b");
+    var mauMat = Color(khuonMat.MauMat, "#4b2e1f");
+    var kindClass = $"kind-{Model.Kind.ToString().ToLowerInvariant()}";
+    var styleClass = $"style-{Model.Style.ToString().ToLowerInvariant()}";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>@Model.Name</h1>
-    <a class="btn btn-primary" asp-action="Editor" asp-route-id="@Model.Id">Mở trình chỉnh sửa</a>
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Hồ sơ nhân vật</span>
+        <h1>@Model.Name</h1>
+        <p>@(string.IsNullOrWhiteSpace(Model.MoTa) ? "Chưa có mô tả cho nhân vật này." : Model.MoTa)</p>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-outline-secondary" asp-action="Index">Danh sách</a>
+        <a class="btn btn-outline-secondary" asp-action="Editor" asp-route-id="@Model.Id">Mở editor</a>
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Sửa</a>
+        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Xóa</a>
+    </div>
 </div>
 
-<dl class="row">
-    <dt class="col-sm-3">Loại</dt>
-    <dd class="col-sm-9">@Model.Kind</dd>
-    <dt class="col-sm-3">Phong cách</dt>
-    <dd class="col-sm-9">@Model.Style</dd>
-    <dt class="col-sm-3">Mẫu</dt>
-    <dd class="col-sm-9">@Model.MauNhanVat?.Name</dd>
-    <dt class="col-sm-3">Chế độ hiển thị</dt>
-    <dd class="col-sm-9">@Model.CheDoHienThi</dd>
-</dl>
+<div class="character-detail-layout">
+    <section class="editor-stage editor-live-stage detail-preview-stage @kindClass @styleClass"
+             style="--skin-color:@mauDa; --hair-color:@mauToc; --eye-color:@mauMat; --body-height:@Num(coThe.OverallHeight); --head-scale:@Num(coThe.DauScale); --shoulder-scale:@Num(coThe.ShoulderWidth); --arm-scale:@Num(coThe.ArmLength); --leg-scale:@Num(coThe.LegLength);">
+        <div class="stage-label">Preview nhân vật</div>
+        <div class="avatar-preview live-avatar @kindClass @styleClass">
+            <span class="avatar-hair"></span>
+            <span class="avatar-head"><i></i><i></i></span>
+            <span class="avatar-body"></span>
+            <span class="avatar-arm avatar-arm-left"></span>
+            <span class="avatar-arm avatar-arm-right"></span>
+            <span class="avatar-leg avatar-leg-left"></span>
+            <span class="avatar-leg avatar-leg-right"></span>
+        </div>
+        <div class="preview-grid"></div>
+        <div class="editor-tools">
+            <div>
+                <strong>@Model.Kind.GetDisplayName()</strong>
+                <span class="text-muted ms-2">@Model.Style.GetDisplayName()</span>
+            </div>
+            <div class="toolbar">
+                <span class="status-pill">@phuKiens.Count phụ kiện</span>
+                <a class="btn btn-sm btn-primary" asp-action="Editor" asp-route-id="@Model.Id">Chỉnh sửa</a>
+            </div>
+        </div>
+    </section>
 
-<h2 class="h4 mt-4">Tài nguyên đã gắn</h2>
-<ul class="list-group">
-@foreach (var taiNguyen in Model.TaiNguyenNhanVats)
-{
-    <li class="list-group-item">@taiNguyen.TaiNguyen3D.Name - @taiNguyen.DiemGan</li>
-}
-</ul>
+    <div class="control-stack">
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Thông tin cơ bản</h2>
+                    <p class="panel-subtitle">Loại nhân vật, phong cách và trạng thái sử dụng.</p>
+                </div>
+            </div>
+            <dl class="detail-list detail-list-polished">
+                <dt>Loại nhân vật</dt>
+                <dd><span class="status-pill">@Model.Kind.GetDisplayName()</span></dd>
+                <dt>Phong cách</dt>
+                <dd>@Model.Style.GetDisplayName()</dd>
+                <dt>Mẫu nhân vật</dt>
+                <dd>@(Model.MauNhanVat?.Name ?? "Không dùng mẫu")</dd>
+                <dt>Chế độ hiển thị</dt>
+                <dd>@Model.CheDoHienThi.GetDisplayName()</dd>
+                <dt>Ngày tạo</dt>
+                <dd>@Date(Model.CreatedAt)</dd>
+                <dt>Cập nhật</dt>
+                <dd>@(Model.UpdatedAt.HasValue ? Date(Model.UpdatedAt.Value) : "Chưa cập nhật")</dd>
+            </dl>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Màu sắc chính</h2>
+                    <p class="panel-subtitle">Màu đang áp dụng cho preview nhân vật.</p>
+                </div>
+            </div>
+            <div class="color-summary-grid">
+                <div class="color-summary-item">
+                    <span>Màu da</span>
+                    <strong><i class="color-chip" style="--chip-color:@mauDa"></i>@mauDa</strong>
+                </div>
+                <div class="color-summary-item">
+                    <span>Màu tóc</span>
+                    <strong><i class="color-chip" style="--chip-color:@mauToc"></i>@mauToc</strong>
+                </div>
+                <div class="color-summary-item">
+                    <span>Màu mắt</span>
+                    <strong><i class="color-chip" style="--chip-color:@mauMat"></i>@mauMat</strong>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="detail-grid detail-grid-spacious">
+    <section class="panel">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">Cấu hình cơ thể</h2>
+                <p class="panel-subtitle">Các tỷ lệ chính đã lưu cho nhân vật.</p>
+            </div>
+        </div>
+        <div class="metric-grid">
+            <div class="metric-item"><span>Chiều cao</span><strong>@Num(coThe.OverallHeight)</strong></div>
+            <div class="metric-item"><span>Tỷ lệ đầu</span><strong>@Num(coThe.DauScale)</strong></div>
+            <div class="metric-item"><span>Cổ</span><strong>@Num(coThe.CoScale)</strong></div>
+            <div class="metric-item"><span>Vai</span><strong>@Num(coThe.ShoulderWidth)</strong></div>
+            <div class="metric-item"><span>Ngực</span><strong>@Num(coThe.NgucScale)</strong></div>
+            <div class="metric-item"><span>Eo</span><strong>@Num(coThe.EoScale)</strong></div>
+            <div class="metric-item"><span>Hông</span><strong>@Num(coThe.HipScale)</strong></div>
+            <div class="metric-item"><span>Khối cơ thể</span><strong>@Num(coThe.CoTheMass)</strong></div>
+            <div class="metric-item metric-wide"><span>Tay</span><strong>Dài @Num(coThe.ArmLength) · Rộng @Num(coThe.ArmWidth)</strong></div>
+            <div class="metric-item metric-wide"><span>Chân</span><strong>Dài @Num(coThe.LegLength) · Rộng @Num(coThe.LegWidth)</strong></div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">Cấu hình khuôn mặt</h2>
+                <p class="panel-subtitle">Kích thước khuôn mặt, mắt, mũi, miệng và tỷ lệ chi tiết.</p>
+            </div>
+        </div>
+        <div class="metric-grid">
+            <div class="metric-item metric-wide"><span>Khuôn mặt</span><strong>Rộng @Num(khuonMat.KhuonMatWidth) · Dài @Num(khuonMat.KhuonMatLength)</strong></div>
+            <div class="metric-item metric-wide"><span>Mắt</span><strong>Cỡ @Num(khuonMat.EyeSize) · Cách @Num(khuonMat.EyeDistance)</strong></div>
+            <div class="metric-item metric-wide"><span>Mũi</span><strong>Cao @Num(khuonMat.NoseHeight) · Rộng @Num(khuonMat.NoseWidth)</strong></div>
+            <div class="metric-item metric-wide"><span>Miệng</span><strong>Rộng @Num(khuonMat.MouthWidth) · Môi @Num(khuonMat.LipThickness)</strong></div>
+            <div class="metric-item"><span>Tai</span><strong>@Num(khuonMat.EarScale)</strong></div>
+            <div class="metric-item"><span>Cằm</span><strong>@Num(khuonMat.ChinScale)</strong></div>
+            <div class="metric-item"><span>Má</span><strong>@Num(khuonMat.CheekScale)</strong></div>
+            <div class="metric-item"><span>Góc lông mày</span><strong>@Num(khuonMat.EyebrowAngle)</strong></div>
+        </div>
+    </section>
+
+    <section class="panel detail-full-row">
+        <div class="panel-header">
+            <div>
+                <h2 class="panel-title">Phụ kiện đã chọn</h2>
+                <p class="panel-subtitle">Các tài nguyên 3D đang được gắn vào nhân vật.</p>
+            </div>
+        </div>
+        @if (phuKiens.Any())
+        {
+            <div class="table-wrap shadow-none">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Tên phụ kiện</th>
+                            <th>Điểm gắn</th>
+                            <th>Tỷ lệ</th>
+                            <th>Màu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var taiNguyen in phuKiens)
+                    {
+                        var mauPhuKien = Color(taiNguyen.MauSac, "#ffffff");
+                        <tr>
+                            <td>@taiNguyen.TaiNguyen3D.Name</td>
+                            <td>@taiNguyen.DiemGan.GetDisplayName()</td>
+                            <td>@Num(taiNguyen.TiLeX) / @Num(taiNguyen.TiLeY) / @Num(taiNguyen.TiLeZ)</td>
+                            <td>
+                                <span class="color-inline">
+                                    <i class="color-chip" style="--chip-color:@mauPhuKien"></i>
+                                    @(string.IsNullOrWhiteSpace(taiNguyen.MauSac) ? "Mặc định" : taiNguyen.MauSac)
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mb-0">Chưa gắn phụ kiện nào cho nhân vật này.</p>
+        }
+    </section>
+</div>

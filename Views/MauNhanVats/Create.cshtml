@@ -1,0 +1,63 @@
+@model DungMoHinh.ViewModels.YeuCauMauNhanVat
+
+@{
+    ViewData["Title"] = "Thêm mẫu nhân vật";
+}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">Quản lý mẫu</span>
+        <h1>Thêm mẫu nhân vật</h1>
+        <p>Tạo mẫu nền để người dùng chọn nhanh khi bắt đầu dựng nhân vật.</p>
+    </div>
+</div>
+
+<form asp-action="Create" method="post" class="panel">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-grid-compact">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên mẫu</label>
+            <input asp-for="Name" class="form-control" placeholder="Nam cơ bản" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Kind" class="form-label">Loại nhân vật</label>
+            <select asp-for="Kind" class="form-select" asp-items="Html.GetEnumSelectList<LoaiNhanVat>()"></select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Style" class="form-label">Phong cách</label>
+            <select asp-for="Style" class="form-select" asp-items="Html.GetEnumSelectList<PhongCachNhanVat>()"></select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Trạng thái</label>
+            <div class="form-check form-switch pt-2">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label">Cho phép sử dụng</label>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label">Mô tả</label>
+        <textarea asp-for="MoTa" class="form-control" rows="3" placeholder="Mô tả mục đích và đặc điểm của mẫu"></textarea>
+    </div>
+    <div class="form-grid-compact">
+        <div class="mb-3">
+            <label asp-for="ModelUrl" class="form-label">Đường dẫn model</label>
+            <input asp-for="ModelUrl" class="form-control" placeholder="/models/base/male.glb" />
+            <span asp-validation-for="ModelUrl" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="AnhDaiDienUrl" class="form-label">Ảnh đại diện</label>
+            <input asp-for="AnhDaiDienUrl" class="form-control" placeholder="/images/templates/male.png" />
+        </div>
+    </div>
+    <div class="toolbar">
+        <button class="btn btn-primary" type="submit">Lưu mẫu</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Hủy</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

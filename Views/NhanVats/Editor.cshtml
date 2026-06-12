@@ -1,109 +1,281 @@
+@using System.Globalization
 @model DungMoHinh.Models.NhanVat
 
 @{
-    ViewData["Title"] = "Trình chỉnh sửa nhân vật";
+    ViewData["Title"] = "Editor nhân vật";
+    var coThe = Model.CauHinhCoThe ?? new CauHinhCoTheNhanVat();
+    var khuonMat = Model.CauHinhKhuonMat ?? new CauHinhKhuonMatNhanVat();
+    var taiNguyens = (IEnumerable<TaiNguyen3D>?)ViewBag.TaiNguyens ?? Enumerable.Empty<TaiNguyen3D>();
+    var phuKiens = Model.TaiNguyenNhanVats.OrderBy(item => item.TaiNguyen3D.Type).ThenBy(item => item.TaiNguyen3D.Name).ToList();
+    string Num(decimal value) => value.ToString("0.##", CultureInfo.InvariantCulture);
+    string Color(string? value, string fallback) => string.IsNullOrWhiteSpace(value) ? fallback : value;
+    var mauDa = Color(khuonMat.MauDa, "#f2c6a0");
+    var mauToc = Color(khuonMat.MauToc, "#2d211b");
+    var mauMat = Color(khuonMat.MauMat, "#4b2e1f");
+    var kindClass = $"kind-{Model.Kind.ToString().ToLowerInvariant()}";
+    var styleClass = $"style-{Model.Style.ToString().ToLowerInvariant()}";
 }
 
 <div class="page-heading">
     <div>
-        <span class="eyebrow">Trình dựng hình 3D</span>
+        <span class="eyebrow">Editor nhân vật</span>
         <h1>@Model.Name</h1>
-        <p>Chỉnh tỷ lệ cơ thể, màu sắc, khuôn mặt và phụ kiện. Khu vực preview sẽ được gắn Three.js ở giai đoạn tiếp theo.</p>
+        <p>Xem trước nhân vật, chỉnh cơ thể, chỉnh màu khuôn mặt, gắn phụ kiện và lưu toàn bộ cấu hình vào database.</p>
     </div>
     <div class="toolbar">
         <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Chi tiết</a>
-        <a class="btn btn-primary" asp-controller="TaiNguyens" asp-action="Index">Thêm tài nguyên</a>
+        <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Id">Sửa nhanh</a>
     </div>
 </div>
 
-<div class="editor-grid">
-    <section class="editor-stage" aria-label="Khu vực xem trước 3D">
-        <div class="stage-label">Viewport 3D</div>
-        <div class="avatar-preview"></div>
+@if (TempData["EditorMessage"] is string message)
+{
+    <div class="alert alert-success">@message</div>
+}
+
+<div class="editor-workspace">
+    <section class="editor-stage editor-live-stage @kindClass @styleClass"
+             style="--skin-color:@mauDa; --hair-color:@mauToc; --eye-color:@mauMat; --body-height:@Num(coThe.OverallHeight); --head-scale:@Num(coThe.DauScale); --shoulder-scale:@Num(coThe.ShoulderWidth); --arm-scale:@Num(coThe.ArmLength); --leg-scale:@Num(coThe.LegLength);">
+        <div class="stage-label">Preview cơ sở</div>
+        <div class="avatar-preview live-avatar @kindClass @styleClass">
+            <span class="avatar-hair"></span>
+            <span class="avatar-head"><i></i><i></i></span>
+            <span class="avatar-body"></span>
+            <span class="avatar-arm avatar-arm-left"></span>
+            <span class="avatar-arm avatar-arm-right"></span>
+            <span class="avatar-leg avatar-leg-left"></span>
+            <span class="avatar-leg avatar-leg-right"></span>
+        </div>
         <div class="preview-grid"></div>
         <div class="editor-tools">
-            <div class="toolbar">
-                <button class="btn btn-light btn-sm" type="button">Xoay</button>
-                <button class="btn btn-light btn-sm" type="button">Phóng to</button>
-                <button class="btn btn-light btn-sm" type="button">Ánh sáng</button>
+            <div>
+                <strong>@Model.Kind.GetDisplayName()</strong>
+                <span class="text-muted ms-2">@Model.Style.GetDisplayName()</span>
             </div>
             <div class="toolbar">
-                <button class="btn btn-outline-secondary btn-sm" type="button">Lưu bản nháp</button>
-                <button class="btn btn-primary btn-sm" type="button">Xuất 3D</button>
+                <span class="status-pill">@phuKiens.Count phụ kiện</span>
+                <a class="btn btn-sm btn-primary" asp-controller="XuatNhanVats" asp-action="Index">Xuất 3D</a>
             </div>
         </div>
     </section>
 
-    <aside class="control-stack">
-        <section class="panel">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Cơ thể</h2>
-                    <p class="panel-subtitle">Điều chỉnh các tỷ lệ chính của nhân vật.</p>
-                </div>
-                <span class="status-pill">@Model.Kind</span>
-            </div>
-            <div class="control-row">
-                <label>Chiều cao</label>
-                <strong>@Model.CauHinhCoThe?.OverallHeight</strong>
-            </div>
-            <div class="range-track mb-3"><span style="width: 72%;"></span></div>
-            <div class="control-row">
-                <label>Đầu</label>
-                <strong>@Model.CauHinhCoThe?.DauScale</strong>
-            </div>
-            <div class="range-track mb-3"><span style="width: 58%;"></span></div>
-            <div class="control-row">
-                <label>Vai</label>
-                <strong>@Model.CauHinhCoThe?.ShoulderWidth</strong>
-            </div>
-            <div class="range-track"><span style="width: 64%;"></span></div>
-        </section>
+    <aside class="editor-control-panel">
+        <form asp-action="LuuCauHinhEditor" asp-route-id="@Model.Id" method="post" class="control-stack" data-editor-form>
+            @Html.AntiForgeryToken()
+            <input name="Id" type="hidden" value="@Model.Id" />
+            <input name="Name" type="hidden" value="@Model.Name" />
+            <input name="MoTa" type="hidden" value="@Model.MoTa" />
+            <input name="MauNhanVatId" type="hidden" value="@(Model.MauNhanVatId?.ToString() ?? string.Empty)" />
+            <input name="Kind" type="hidden" value="@Model.Kind" />
+            <input name="Style" type="hidden" value="@Model.Style" />
 
-        <section class="panel">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Khuôn mặt</h2>
-                    <p class="panel-subtitle">Màu sắc và đặc điểm nhận diện.</p>
-                </div>
-            </div>
-            <div class="control-row">
-                <label>Màu da</label>
-                <strong>@Model.CauHinhKhuonMat?.MauDa</strong>
-            </div>
-            <div class="control-row">
-                <label>Màu tóc</label>
-                <strong>@Model.CauHinhKhuonMat?.MauToc</strong>
-            </div>
-            <div class="control-row">
-                <label>Màu mắt</label>
-                <strong>@Model.CauHinhKhuonMat?.MauMat</strong>
-            </div>
-        </section>
-
-        <section class="panel">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Tài nguyên đã chọn</h2>
-                    <p class="panel-subtitle">Phụ kiện, trang phục và vật liệu gắn vào nhân vật.</p>
-                </div>
-            </div>
-            @if (Model.TaiNguyenNhanVats.Any())
-            {
-                <div class="list-group list-group-flush">
-                @foreach (var taiNguyen in Model.TaiNguyenNhanVats)
-                {
-                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                        <span>@taiNguyen.TaiNguyen3D.Name</span>
-                        <span class="status-pill">@taiNguyen.TaiNguyen3D.Type</span>
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Chỉnh cơ thể</h2>
+                        <p class="panel-subtitle">Các tỷ lệ chính: chiều cao, đầu, vai, tay, chân và thân người.</p>
                     </div>
-                }
                 </div>
+                <div class="quick-edit-grid">
+                    <div class="fast-control">
+                        <label for="CoThe_OverallHeight">Chiều cao</label>
+                        <div class="fast-control-row">
+                            <input id="CoThe_OverallHeight" name="CoThe.OverallHeight" type="range" min="0.5" max="2" step="0.05" value="@Num(coThe.OverallHeight)" class="form-range" data-preview-var="--body-height" />
+                            <input name="CoThe.OverallHeight" type="number" min="0.5" max="2" step="0.05" value="@Num(coThe.OverallHeight)" class="form-control fast-number" />
+                        </div>
+                    </div>
+                    <div class="fast-control">
+                        <label for="CoThe_DauScale">Tỷ lệ đầu</label>
+                        <div class="fast-control-row">
+                            <input id="CoThe_DauScale" name="CoThe.DauScale" type="range" min="0.5" max="2" step="0.05" value="@Num(coThe.DauScale)" class="form-range" data-preview-var="--head-scale" />
+                            <input name="CoThe.DauScale" type="number" min="0.5" max="2" step="0.05" value="@Num(coThe.DauScale)" class="form-control fast-number" />
+                        </div>
+                    </div>
+                    <div class="fast-control">
+                        <label for="CoThe_ShoulderWidth">Độ rộng vai</label>
+                        <div class="fast-control-row">
+                            <input id="CoThe_ShoulderWidth" name="CoThe.ShoulderWidth" type="range" min="0.5" max="2" step="0.05" value="@Num(coThe.ShoulderWidth)" class="form-range" data-preview-var="--shoulder-scale" />
+                            <input name="CoThe.ShoulderWidth" type="number" min="0.5" max="2" step="0.05" value="@Num(coThe.ShoulderWidth)" class="form-control fast-number" />
+                        </div>
+                    </div>
+                    <div class="fast-control">
+                        <label for="CoThe_CoTheMass">Khối cơ thể</label>
+                        <div class="fast-control-row">
+                            <input id="CoThe_CoTheMass" name="CoThe.CoTheMass" type="range" min="0.5" max="2" step="0.05" value="@Num(coThe.CoTheMass)" class="form-range" />
+                            <input name="CoThe.CoTheMass" type="number" min="0.5" max="2" step="0.05" value="@Num(coThe.CoTheMass)" class="form-control fast-number" />
+                        </div>
+                    </div>
+                    <div class="fast-control">
+                        <label for="CoThe_ArmLength">Chiều dài tay</label>
+                        <div class="fast-control-row">
+                            <input id="CoThe_ArmLength" name="CoThe.ArmLength" type="range" min="0.5" max="2" step="0.05" value="@Num(coThe.ArmLength)" class="form-range" data-preview-var="--arm-scale" />
+                            <input name="CoThe.ArmLength" type="number" min="0.5" max="2" step="0.05" value="@Num(coThe.ArmLength)" class="form-control fast-number" />
+                        </div>
+                    </div>
+                    <div class="fast-control">
+                        <label for="CoThe_LegLength">Chiều dài chân</label>
+                        <div class="fast-control-row">
+                            <input id="CoThe_LegLength" name="CoThe.LegLength" type="range" min="0.5" max="2" step="0.05" value="@Num(coThe.LegLength)" class="form-range" data-preview-var="--leg-scale" />
+                            <input name="CoThe.LegLength" type="number" min="0.5" max="2" step="0.05" value="@Num(coThe.LegLength)" class="form-control fast-number" />
+                        </div>
+                    </div>
+                </div>
+                <input name="CoThe.CoScale" type="hidden" value="@Num(coThe.CoScale)" />
+                <input name="CoThe.NgucScale" type="hidden" value="@Num(coThe.NgucScale)" />
+                <input name="CoThe.EoScale" type="hidden" value="@Num(coThe.EoScale)" />
+                <input name="CoThe.HipScale" type="hidden" value="@Num(coThe.HipScale)" />
+                <input name="CoThe.ArmWidth" type="hidden" value="@Num(coThe.ArmWidth)" />
+                <input name="CoThe.HandScale" type="hidden" value="@Num(coThe.HandScale)" />
+                <input name="CoThe.LegWidth" type="hidden" value="@Num(coThe.LegWidth)" />
+                <input name="CoThe.FootScale" type="hidden" value="@Num(coThe.FootScale)" />
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Chỉnh khuôn mặt</h2>
+                        <p class="panel-subtitle">Chọn màu da, màu tóc và màu mắt cho preview cơ sở.</p>
+                    </div>
+                </div>
+                <div class="color-grid">
+                    <div class="color-control">
+                        <label for="KhuonMat_MauDa">Màu da</label>
+                        <input id="KhuonMat_MauDa" name="KhuonMat.MauDa" type="color" value="@mauDa" class="form-control form-control-color" data-preview-var="--skin-color" />
+                    </div>
+                    <div class="color-control">
+                        <label for="KhuonMat_MauToc">Màu tóc</label>
+                        <input id="KhuonMat_MauToc" name="KhuonMat.MauToc" type="color" value="@mauToc" class="form-control form-control-color" data-preview-var="--hair-color" />
+                    </div>
+                    <div class="color-control">
+                        <label for="KhuonMat_MauMat">Màu mắt</label>
+                        <input id="KhuonMat_MauMat" name="KhuonMat.MauMat" type="color" value="@mauMat" class="form-control form-control-color" data-preview-var="--eye-color" />
+                    </div>
+                </div>
+                <input name="KhuonMat.KhuonMatWidth" type="hidden" value="@Num(khuonMat.KhuonMatWidth)" />
+                <input name="KhuonMat.KhuonMatLength" type="hidden" value="@Num(khuonMat.KhuonMatLength)" />
+                <input name="KhuonMat.EyeSize" type="hidden" value="@Num(khuonMat.EyeSize)" />
+                <input name="KhuonMat.EyeDistance" type="hidden" value="@Num(khuonMat.EyeDistance)" />
+                <input name="KhuonMat.EyeAngle" type="hidden" value="@Num(khuonMat.EyeAngle)" />
+                <input name="KhuonMat.NoseHeight" type="hidden" value="@Num(khuonMat.NoseHeight)" />
+                <input name="KhuonMat.NoseWidth" type="hidden" value="@Num(khuonMat.NoseWidth)" />
+                <input name="KhuonMat.MouthWidth" type="hidden" value="@Num(khuonMat.MouthWidth)" />
+                <input name="KhuonMat.LipThickness" type="hidden" value="@Num(khuonMat.LipThickness)" />
+                <input name="KhuonMat.EarScale" type="hidden" value="@Num(khuonMat.EarScale)" />
+                <input name="KhuonMat.ChinScale" type="hidden" value="@Num(khuonMat.ChinScale)" />
+                <input name="KhuonMat.CheekScale" type="hidden" value="@Num(khuonMat.CheekScale)" />
+                <input name="KhuonMat.EyebrowAngle" type="hidden" value="@Num(khuonMat.EyebrowAngle)" />
+            </section>
+
+            <div class="sticky-form-actions">
+                <button class="btn btn-primary" type="submit">Lưu cấu hình</button>
+                <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Hủy</a>
+            </div>
+        </form>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Gắn phụ kiện</h2>
+                    <p class="panel-subtitle">Chọn tài nguyên 3D có sẵn để gắn vào nhân vật.</p>
+                </div>
+            </div>
+            <form asp-action="GanTaiNguyen" asp-route-id="@Model.Id" method="post" class="asset-attach-form">
+                @Html.AntiForgeryToken()
+                <select name="TaiNguyen3DId" class="form-select" required>
+                    <option value="">Chọn tài nguyên</option>
+                    @foreach (var taiNguyen in taiNguyens)
+                    {
+                        <option value="@taiNguyen.Id">@taiNguyen.Name - @taiNguyen.Type</option>
+                    }
+                </select>
+                <select name="DiemGan" class="form-select" asp-items="Html.GetEnumSelectList<DiemGan>()"></select>
+                <input name="TenDiemGanTuyChinh" class="form-control" placeholder="Tên điểm gắn tùy chỉnh" />
+                <input name="MauSac" type="color" class="form-control form-control-color" value="#ffffff" />
+                <button class="btn btn-primary" type="submit">Gắn vào nhân vật</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Chỉnh phụ kiện</h2>
+                    <p class="panel-subtitle">Điều chỉnh vị trí, xoay, scale và màu của từng tài nguyên đã gắn.</p>
+                </div>
+            </div>
+            @if (!phuKiens.Any())
+            {
+                <p class="text-muted mb-0">Chưa gắn phụ kiện nào cho nhân vật này.</p>
             }
             else
             {
-                <p class="text-muted mb-0">Chưa gắn tài nguyên nào cho nhân vật này.</p>
+                <div class="accessory-list">
+                @foreach (var phuKien in phuKiens)
+                {
+                    <article class="accessory-editor">
+                        <div class="accessory-heading">
+                            <div>
+                                <strong>@phuKien.TaiNguyen3D.Name</strong>
+                                <small>@phuKien.TaiNguyen3D.Type - @phuKien.DiemGan</small>
+                            </div>
+                            <form asp-action="GoTaiNguyen" method="post">
+                                @Html.AntiForgeryToken()
+                                <input name="nhanVatId" type="hidden" value="@Model.Id" />
+                                <input name="taiNguyenNhanVatId" type="hidden" value="@phuKien.Id" />
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Gỡ</button>
+                            </form>
+                        </div>
+                        <form asp-action="CapNhatPhuKien" method="post">
+                            @Html.AntiForgeryToken()
+                            <input name="NhanVatId" type="hidden" value="@Model.Id" />
+                            <input name="TaiNguyenNhanVatId" type="hidden" value="@phuKien.Id" />
+                            <div class="transform-grid">
+                                <label>Vị trí X <input name="ViTriX" class="form-control" type="number" step="0.05" value="@Num(phuKien.ViTriX)" /></label>
+                                <label>Vị trí Y <input name="ViTriY" class="form-control" type="number" step="0.05" value="@Num(phuKien.ViTriY)" /></label>
+                                <label>Vị trí Z <input name="ViTriZ" class="form-control" type="number" step="0.05" value="@Num(phuKien.ViTriZ)" /></label>
+                                <label>Xoay X <input name="XoayX" class="form-control" type="number" step="1" value="@Num(phuKien.XoayX)" /></label>
+                                <label>Xoay Y <input name="XoayY" class="form-control" type="number" step="1" value="@Num(phuKien.XoayY)" /></label>
+                                <label>Xoay Z <input name="XoayZ" class="form-control" type="number" step="1" value="@Num(phuKien.XoayZ)" /></label>
+                                <label>Scale X <input name="TiLeX" class="form-control" type="number" min="0.1" max="4" step="0.05" value="@Num(phuKien.TiLeX)" /></label>
+                                <label>Scale Y <input name="TiLeY" class="form-control" type="number" min="0.1" max="4" step="0.05" value="@Num(phuKien.TiLeY)" /></label>
+                                <label>Scale Z <input name="TiLeZ" class="form-control" type="number" min="0.1" max="4" step="0.05" value="@Num(phuKien.TiLeZ)" /></label>
+                                <label>Màu <input name="MauSac" class="form-control form-control-color w-100" type="color" value="@Color(phuKien.MauSac, "#ffffff")" /></label>
+                                <label>Kim loại <input name="DoKimLoai" class="form-control" type="number" min="0" max="1" step="0.05" value="@Num(phuKien.DoKimLoai)" /></label>
+                                <label>Độ nhám <input name="DoNham" class="form-control" type="number" min="0" max="1" step="0.05" value="@Num(phuKien.DoNham)" /></label>
+                            </div>
+                            <div class="toolbar mt-3">
+                                <button class="btn btn-sm btn-primary" type="submit">Lưu phụ kiện</button>
+                            </div>
+                        </form>
+                    </article>
+                }
+                </div>
             }
         </section>
     </aside>
 </div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const stage = document.querySelector(".editor-live-stage");
+            document.querySelectorAll("[data-editor-form] input[type='range']").forEach((range) => {
+                const number = range.parentElement?.querySelector("input[type='number']");
+                const previewVar = range.dataset.previewVar;
+                const sync = (value) => {
+                    range.value = value;
+                    if (number) number.value = value;
+                    if (stage && previewVar) stage.style.setProperty(previewVar, value);
+                };
+                range.addEventListener("input", () => sync(range.value));
+                number?.addEventListener("input", () => sync(number.value));
+            });
+
+            document.querySelectorAll("[data-editor-form] input[type='color']").forEach((input) => {
+                input.addEventListener("input", () => {
+                    const previewVar = input.dataset.previewVar;
+                    if (stage && previewVar) stage.style.setProperty(previewVar, input.value);
+                });
+            });
+        })();
+    </script>
+}

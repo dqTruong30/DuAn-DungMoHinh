@@ -2,36 +2,92 @@
 
 @{
     ViewData["Title"] = "Mẫu nhân vật";
+    var laAdmin = User.IsInRole(VaiTroHeThong.Admin);
 }
 
 <div class="page-heading">
     <div>
         <span class="eyebrow">Preset khởi tạo</span>
         <h1>Mẫu nhân vật</h1>
-        <p>Các mẫu nền giúp người dùng tạo nhanh nhân vật theo loại và phong cách mong muốn.</p>
+        <p>Chọn nhanh các mẫu nhân vật nam, nữ, chibi hoặc fantasy để bắt đầu dựng mô hình 3D chuyên nghiệp hơn.</p>
     </div>
+    @if (laAdmin)
+    {
+        <div class="toolbar">
+            <a class="btn btn-primary" asp-action="Create">Thêm mẫu</a>
+        </div>
+    }
 </div>
 
-<div class="table-wrap">
-    <table class="table align-middle">
-        <thead>
-            <tr>
-                <th>Tên</th>
-                <th>Loại</th>
-                <th>Phong cách</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <h2>Chưa có mẫu nhân vật</h2>
+        <p>Admin có thể thêm mẫu nền để người dùng chọn khi tạo nhân vật.</p>
+        @if (laAdmin)
+        {
+            <a class="btn btn-primary" asp-action="Create">Thêm mẫu đầu tiên</a>
+        }
+    </div>
+}
+else
+{
+    <div class="template-gallery">
         @foreach (var item in Model)
         {
-            <tr>
-                <td><strong>@item.Name</strong></td>
-                <td><span class="status-pill">@item.Kind</span></td>
-                <td>@item.Style</td>
-                <td class="text-end"><a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiết</a></td>
-            </tr>
+            var coAnh = !string.IsNullOrWhiteSpace(item.AnhDaiDienUrl);
+            var kindClass = $"kind-{item.Kind.ToString().ToLowerInvariant()}";
+            var styleClass = $"style-{item.Style.ToString().ToLowerInvariant()}";
+            <article class="template-card">
+                <a class="template-art @kindClass @styleClass" asp-action="Details" asp-route-id="@item.Id" aria-label="Xem chi tiết @item.Name">
+                    @if (coAnh)
+                    {
+                        <img src="@item.AnhDaiDienUrl" alt="@item.Name" />
+                    }
+                    else
+                    {
+                        <div class="fantasy-avatar @kindClass @styleClass" aria-hidden="true">
+                            <span class="magic-aura"></span>
+                            <span class="magic-orb"></span>
+                            <span class="fantasy-hair"></span>
+                            <span class="fantasy-head"><i></i><i></i></span>
+                            <span class="fantasy-collar"></span>
+                            <span class="fantasy-robe"></span>
+                            <span class="fantasy-belt"></span>
+                            <span class="fantasy-arm fantasy-arm-left"></span>
+                            <span class="fantasy-arm fantasy-arm-right"></span>
+                            <span class="fantasy-leg fantasy-leg-left"></span>
+                            <span class="fantasy-leg fantasy-leg-right"></span>
+                        </div>
+                    }
+                </a>
+
+                <div class="template-card-body">
+                    <div class="template-card-title">
+                        <div>
+                            <h2>@item.Name</h2>
+                            <p>@(string.IsNullOrWhiteSpace(item.MoTa) ? "Mẫu dựng sẵn để khởi tạo nhân vật nhanh." : item.MoTa)</p>
+                        </div>
+                        <span class="status-pill @(item.IsActive ? string.Empty : "status-muted")">
+                            @(item.IsActive ? "Đang dùng" : "Đã khóa")
+                        </span>
+                    </div>
+
+                    <div class="template-meta">
+                        <span>@item.Kind.GetDisplayName()</span>
+                        <span>@item.Style.GetDisplayName()</span>
+                    </div>
+
+                    <div class="toolbar mt-3">
+                        <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@item.Id">Xem mẫu</a>
+                        @if (laAdmin)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                        }
+                    </div>
+                </div>
+            </article>
         }
-        </tbody>
-    </table>
-</div>
+    </div>
+}
