@@ -1,16 +1,16 @@
 @model DungMoHinh.Models.MauNhanVat
 
 @{
-    ViewData["Title"] = "Chi tiet mau";
+    ViewData["Title"] = "Chi tiết mẫu";
 }
 
 <h1>@Model.Name</h1>
 
 <dl class="row">
-    <dt class="col-sm-3">Loai</dt>
+    <dt class="col-sm-3">Loại</dt>
     <dd class="col-sm-9">@Model.Kind</dd>
-    <dt class="col-sm-3">Phong cach</dt>
+    <dt class="col-sm-3">Phong cách</dt>
     <dd class="col-sm-9">@Model.Style</dd>
-    <dt class="col-sm-3">Duong dan model</dt>
+    <dt class="col-sm-3">Đường dẫn model</dt>
     <dd class="col-sm-9">@Model.ModelUrl</dd>
 </dl>

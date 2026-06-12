@@ -1,26 +1,26 @@
 @model IEnumerable<DungMoHinh.Models.NhanVat>
 
 @{
-    ViewData["Title"] = "Nhan vat";
+    ViewData["Title"] = "Nhân vật";
 }
 
 <div class="page-heading">
     <div>
-        <span class="eyebrow">Thu vien ca nhan</span>
-        <h1>Nhan vat</h1>
-        <p>Quan ly cac nhan vat da tao, mo lai editor de tiep tuc tuy chinh hoac xem chi tiet cau hinh.</p>
+        <span class="eyebrow">Thư viện cá nhân</span>
+        <h1>Nhân vật</h1>
+        <p>Quản lý các nhân vật đã tạo, mở lại editor để tiếp tục tùy chỉnh hoặc xem chi tiết cấu hình.</p>
     </div>
     <div class="toolbar">
-        <a class="btn btn-primary" asp-action="Create">Tao moi</a>
+        <a class="btn btn-primary" asp-action="Create">Tạo mới</a>
     </div>
 </div>
 
 @if (!Model.Any())
 {
     <div class="empty-state">
-        <h2>Chua co nhan vat nao</h2>
-        <p>Hay tao nhan vat dau tien de bat dau xay dung thu vien thiet ke 3D cua ban.</p>
-        <a class="btn btn-primary" asp-action="Create">Tao nhan vat</a>
+        <h2>Chưa có nhân vật nào</h2>
+        <p>Hãy tạo nhân vật đầu tiên để bắt đầu xây dựng thư viện thiết kế 3D của bạn.</p>
+        <a class="btn btn-primary" asp-action="Create">Tạo nhân vật</a>
     </div>
 }
 else
@@ -29,10 +29,10 @@ else
         <table class="table align-middle">
             <thead>
                 <tr>
-                    <th>Ten</th>
-                    <th>Loai</th>
-                    <th>Phong cach</th>
-                    <th>Cap nhat</th>
+                    <th>Tên</th>
+                    <th>Loại</th>
+                    <th>Phong cách</th>
+                    <th>Cập nhật</th>
                     <th></th>
                 </tr>
             </thead>
@@ -48,8 +48,8 @@ else
                     <td>@item.Style</td>
                     <td>@(item.UpdatedAt ?? item.CreatedAt)</td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-primary" asp-action="Editor" asp-route-id="@item.Id">Chinh sua</a>
-                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiet</a>
+                        <a class="btn btn-sm btn-primary" asp-action="Editor" asp-route-id="@item.Id">Chỉnh sửa</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
                     </td>
                 </tr>
             }

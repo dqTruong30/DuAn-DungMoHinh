@@ -1,21 +1,21 @@
 @model DungMoHinh.Models.TaiNguyen3D
 
 @{
-    ViewData["Title"] = "Chi tiet tai nguyen";
+    ViewData["Title"] = "Chi tiết tài nguyên";
 }
 
 <h1>@Model.Name</h1>
 
 <dl class="row">
-    <dt class="col-sm-3">Loai</dt>
+    <dt class="col-sm-3">Loại</dt>
     <dd class="col-sm-9">@Model.Type</dd>
-    <dt class="col-sm-3">Duong dan file</dt>
+    <dt class="col-sm-3">Đường dẫn file</dt>
     <dd class="col-sm-9">@Model.DuongDanFile</dd>
-    <dt class="col-sm-3">Mau mac dinh</dt>
+    <dt class="col-sm-3">Màu mặc định</dt>
     <dd class="col-sm-9">@Model.MauSacMacDinh</dd>
 </dl>
 
-<h2 class="h4">Diem chinh phu kien</h2>
+<h2 class="h4">Điểm chỉnh phụ kiện</h2>
 <ul class="list-group">
 @foreach (var point in Model.AdjustmentPoints)
 {

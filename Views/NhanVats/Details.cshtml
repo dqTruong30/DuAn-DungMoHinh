@@ -1,26 +1,26 @@
 @model DungMoHinh.Models.NhanVat
 
 @{
-    ViewData["Title"] = "Chi tiet nhan vat";
+    ViewData["Title"] = "Chi tiết nhân vật";
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>@Model.Name</h1>
-    <a class="btn btn-primary" asp-action="Editor" asp-route-id="@Model.Id">Mo trinh chinh sua</a>
+    <a class="btn btn-primary" asp-action="Editor" asp-route-id="@Model.Id">Mở trình chỉnh sửa</a>
 </div>
 
 <dl class="row">
-    <dt class="col-sm-3">Loai</dt>
+    <dt class="col-sm-3">Loại</dt>
     <dd class="col-sm-9">@Model.Kind</dd>
-    <dt class="col-sm-3">Phong cach</dt>
+    <dt class="col-sm-3">Phong cách</dt>
     <dd class="col-sm-9">@Model.Style</dd>
-    <dt class="col-sm-3">Mau</dt>
+    <dt class="col-sm-3">Mẫu</dt>
     <dd class="col-sm-9">@Model.MauNhanVat?.Name</dd>
-    <dt class="col-sm-3">Che do hien thi</dt>
+    <dt class="col-sm-3">Chế độ hiển thị</dt>
     <dd class="col-sm-9">@Model.CheDoHienThi</dd>
 </dl>
 
-<h2 class="h4 mt-4">Tai nguyen da gan</h2>
+<h2 class="h4 mt-4">Tài nguyên đã gắn</h2>
 <ul class="list-group">
 @foreach (var taiNguyen in Model.TaiNguyenNhanVats)
 {

@@ -1,0 +1,69 @@
+@model DungMoHinh.ViewModels.YeuCauDangNhap
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="auth-page">
+    <section class="auth-panel">
+        <div class="panel-header">
+            <div>
+                <span class="eyebrow">Tài khoản</span>
+                <h1 class="panel-title">Đăng nhập</h1>
+                <p class="panel-subtitle">Đăng nhập để tạo nhân vật, tải ảnh, lưu cấu hình và quản lý dữ liệu theo quyền của bạn.</p>
+            </div>
+        </div>
+
+        <form asp-action="DangNhap" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="ReturnUrl" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" autocomplete="username" placeholder="user@dungmohinh.local" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MatKhau" class="form-label">Mật khẩu</label>
+                <input asp-for="MatKhau" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="MatKhau" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-4">
+                <input asp-for="GhiNhoDangNhap" class="form-check-input" />
+                <label asp-for="GhiNhoDangNhap" class="form-check-label">Ghi nhớ đăng nhập</label>
+            </div>
+
+            <div class="toolbar">
+                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                <a class="btn btn-outline-secondary" asp-action="DangKy">Tạo tài khoản User</a>
+            </div>
+        </form>
+    </section>
+
+    <aside class="auth-help panel">
+        <h2 class="panel-title">Tài khoản mẫu</h2>
+        <p class="panel-subtitle">Cổng đăng nhập này chỉ dành cho tài khoản User.</p>
+
+        <div class="login-sample">
+            <span class="status-pill">User</span>
+            <strong>user@dungmohinh.local</strong>
+            <small>Mật khẩu: User123</small>
+            <p>Được tạo nhân vật, upload ảnh, dùng editor nhưng không vào khu quản trị.</p>
+        </div>
+
+        <div class="login-sample">
+            <span class="status-pill">Admin</span>
+            <strong>/modelAdmin</strong>
+            <small>Cổng đăng nhập riêng</small>
+            <p>Tài khoản Admin không đăng nhập tại màn hình User.</p>
+        </div>
+    </aside>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

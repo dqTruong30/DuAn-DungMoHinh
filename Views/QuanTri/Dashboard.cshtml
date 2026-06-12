@@ -1,67 +1,67 @@
 @model DungMoHinh.ViewModels.TongQuanQuanTri
 
 @{
-    ViewData["Title"] = "Bang quan tri";
+    ViewData["Title"] = "Bảng quản trị";
 }
 
 <div class="page-heading">
     <div>
-        <span class="eyebrow">Quan tri he thong</span>
-        <h1>Bang quan tri</h1>
-        <p>Theo doi nguoi dung, nhan vat, mau thiet lap, tai nguyen 3D va lich su xuat file.</p>
+        <span class="eyebrow">Quản trị hệ thống</span>
+        <h1>Bảng quản trị</h1>
+        <p>Theo dõi người dùng, nhân vật, mẫu thiết lập, tài nguyên 3D và lịch sử xuất file.</p>
     </div>
     <div class="toolbar">
-        <a class="btn btn-primary" asp-controller="NhanVats" asp-action="Create">Tao nhan vat</a>
+        <a class="btn btn-primary" asp-controller="NhanVats" asp-action="Create">Tạo nhân vật</a>
     </div>
 </div>
 
 <section class="metric-grid mb-4">
     <div class="metric-card">
-        <span>Nguoi dung</span>
+        <span>Người dùng</span>
         <strong>@Model.UserCount</strong>
-        <small>Ho so dang quan ly</small>
+        <small>Hồ sơ đang quản lý</small>
     </div>
     <div class="metric-card">
-        <span>Nhan vat</span>
+        <span>Nhân vật</span>
         <strong>@Model.NhanVatCount</strong>
-        <small>Du an da tao</small>
+        <small>Dự án đã tạo</small>
     </div>
     <div class="metric-card">
         <span>Mau</span>
         <strong>@Model.MauCount</strong>
-        <small>Bo khoi tao nhanh</small>
+        <small>Bộ khởi tạo nhanh</small>
     </div>
     <div class="metric-card">
-        <span>Tai nguyen</span>
+        <span>Tài nguyên</span>
         <strong>@Model.TaiNguyenCount</strong>
-        <small>Vat lieu va phu kien</small>
+        <small>Vật liệu và phụ kiện</small>
     </div>
     <div class="metric-card">
-        <span>Anh tai len</span>
+        <span>Ảnh tải lên</span>
         <strong>@Model.TaiLenCount</strong>
-        <small>Anh mau va phu kien</small>
+        <small>Ảnh mẫu và phụ kiện</small>
     </div>
     <div class="metric-card">
-        <span>Luot xuat</span>
+        <span>Lượt xuất</span>
         <strong>@Model.XuatCount</strong>
-        <small>File da tao ra</small>
+        <small>File đã tạo ra</small>
     </div>
 </section>
 
 <div class="workflow-grid">
     <a class="workflow-card" asp-action="Characters">
         <span class="step">NV</span>
-        <h2>Nhan vat</h2>
-        <p>Kiem tra danh sach nhan vat va tinh trang cau hinh.</p>
+        <h2>Nhân vật</h2>
+        <p>Kiểm tra danh sách nhân vật và tình trạng cấu hình.</p>
     </a>
     <a class="workflow-card" asp-action="Assets">
         <span class="step">3D</span>
-        <h2>Tai nguyen</h2>
-        <p>Quan ly model, trang phuc, phu kien, vat lieu va texture.</p>
+        <h2>Tài nguyên</h2>
+        <p>Quản lý model, trang phục, phụ kiện, vật liệu và texture.</p>
     </a>
     <a class="workflow-card" asp-action="Uploads">
         <span class="step">AI</span>
-        <h2>Anh tai len</h2>
-        <p>Theo doi anh nguoi dung, anh phu kien va ket qua phan tich.</p>
+        <h2>Ảnh tải lên</h2>
+        <p>Theo dõi ảnh người dùng, ảnh phụ kiện và kết quả phân tích.</p>
     </a>
 </div>

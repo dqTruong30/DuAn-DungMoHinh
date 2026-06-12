@@ -1,13 +1,13 @@
 @model IEnumerable<DungMoHinh.Models.TaiNguyen3D>
 
 @{
-    ViewData["Title"] = "Quan tri tai nguyen";
+    ViewData["Title"] = "Quản trị tài nguyên";
 }
 
-<h1>Quan tri tai nguyen</h1>
+<h1>Quản trị tài nguyên</h1>
 
 <table class="table table-striped">
-    <thead><tr><th>Ten</th><th>Loai</th><th>Dang hoat dong</th><th>Nguoi dung tao</th></tr></thead>
+    <thead><tr><th>Tên</th><th>Loại</th><th>Đang hoạt động</th><th>Người dùng tạo</th></tr></thead>
     <tbody>
     @foreach (var item in Model)
     {

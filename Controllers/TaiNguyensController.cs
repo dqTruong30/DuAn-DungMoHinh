@@ -3,6 +3,7 @@
 using DungMoHinh.Models;
 using DungMoHinh.Repositories.Interfaces;
 using DungMoHinh.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DungMoHinh.Controllers;
@@ -35,6 +36,7 @@ public class TaiNguyensController : ControllerCoSo
     }
 
     [HttpPost]
+    [Authorize(Roles = VaiTroHeThong.Admin)]
     public async Task<IActionResult> Create([FromBody] YeuCauTaoTaiNguyen request)
     {
         if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.DuongDanFile))
@@ -63,6 +65,7 @@ public class TaiNguyensController : ControllerCoSo
     }
 
     [HttpPost]
+    [Authorize(Roles = VaiTroHeThong.Admin)]
     public async Task<IActionResult> Disable(int id)
     {
         var disabled = await _unitOfWork.TaiNguyens.DisableAsync(id);
